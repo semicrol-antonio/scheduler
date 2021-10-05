@@ -49,3 +49,4 @@ C:\Users\antonio\source\repos\Scheduler\Scheduler.Windows\obj\Debug\Scheduler.Wi
 C:\Users\antonio\source\repos\Scheduler\Scheduler.Windows\obj\Debug\Scheduler.Windows.csproj.CopyComplete
 C:\Users\antonio\source\repos\Scheduler\Scheduler.Windows\obj\Debug\Scheduler.Windows.exe
 C:\Users\antonio\source\repos\Scheduler\Scheduler.Windows\obj\Debug\Scheduler.Windows.pdb
+C:\Users\antonio\source\repos\Scheduler\Scheduler.Windows\obj\Debug\Scheduler.Windows.csproj.AssemblyReference.cache
