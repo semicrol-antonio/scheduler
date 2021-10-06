@@ -1,5 +1,5 @@
 ﻿
-namespace Scheduler.Windows
+namespace Scheduler
 {
     partial class Form1
     {

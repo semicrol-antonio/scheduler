@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Scheduler.Windows
+namespace Scheduler
 
 {
     public enum RecurrenceTypes
@@ -19,11 +19,11 @@ namespace Scheduler.Windows
     {
         public SchedulerException(String mensaje) : base(mensaje) { }
     }
-    public class Scheduler 
+    public class SchedulerManager
     {
         public DateTime NextOcurrence(RecurrenceTypes Type, int Periodicity, DateTime StartDate, DateTime EndDate, DateTime CurrentDate)
         {
-            DateTime OcurrenceDate = DateTime .MinValue ;
+            DateTime OcurrenceDate = DateTime.MinValue;
 
             // Comprueba que se envia la fecha de inicio
             if (StartDate == DateTime.MinValue)
@@ -32,7 +32,7 @@ namespace Scheduler.Windows
             switch (Type)
             {
                 case RecurrenceTypes.Once:
-                    if (CurrentDate == DateTime.MinValue )
+                    if (CurrentDate == DateTime.MinValue)
                         throw new SchedulerException("Debe indicarse la fecha y hora de ejecución");
 
                     OcurrenceDate = CurrentDate;
@@ -58,3 +58,4 @@ namespace Scheduler.Windows
         }
     }
 }
+

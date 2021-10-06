@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 
 
-namespace Scheduler.Windows
+namespace Scheduler
 {
     public partial class Form1 : Form
     {
@@ -22,7 +22,7 @@ namespace Scheduler.Windows
 
         private void CalculateBT_Click(object sender, EventArgs e)
         {
-            var Gestor = new Scheduler();
+            var Gestor = new SchedulerManager();
 
             if (TypeLB.SelectedIndex == 0)
             {
