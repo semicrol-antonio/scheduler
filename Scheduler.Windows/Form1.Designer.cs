@@ -622,7 +622,7 @@ namespace Scheduler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(613, 752);
+            this.ClientSize = new System.Drawing.Size(620, 752);
             this.Controls.Add(this.groupControl6);
             this.Controls.Add(this.groupControl5);
             this.Controls.Add(this.groupControl4);

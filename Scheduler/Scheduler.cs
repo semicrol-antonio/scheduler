@@ -57,7 +57,7 @@ namespace Scheduler
         public DateTime StartDate;
         public DateTime EndDate;
         public DateTime CurrentDate;
-        public int WeekDays;
+        public int WeekDays = 0;
 
         // Hourly Frecuency;
         public HourlyFrecuencys HourlyFrecuency;
@@ -296,8 +296,8 @@ namespace Scheduler
                 throw new SchedulerException("La hora 'desde' debe ser inferior a la hora 'hasta'.");
 
             // Se pone la periocidad a 1 si es menor o igual a 0
-            if (this.Periodicity <= 0)
-                this.Periodicity = 1;
+            if (this.Type == RecurrenceTypes.Daily && this.Periodicity <= 0)
+                throw new SchedulerException("La Periodicidad debe ser superior a 0'.");
             // Comprueba que se envia la fecha de inicio
             if (StartDate == DateTime.MinValue)
                 throw new SchedulerException("Debe indicar la fecha limite de inicio.");
@@ -306,7 +306,7 @@ namespace Scheduler
             {
                 case RecurrenceTypes.Once:
                     if (CurrentDate == DateTime.MinValue)
-                        throw new SchedulerException("Debe indicarse la fecha y hora de ejecución");
+                        throw new SchedulerException("Cuando la ejecución es de tipo único debe indicarse la fecha y hora de ejecución");
 
                     break;
                 case RecurrenceTypes.Daily:

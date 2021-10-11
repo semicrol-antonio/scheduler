@@ -121,8 +121,6 @@ namespace Scheduler
                             if (SundayCB.Checked)
                                 Gestor.WeekDays += (int)WeekDaysEnum.Sunday;
 
-
-
                             current = Gestor.NextOcurrence();
 
                             NextExecutionTB.Text = current.NextExecutionTime;
@@ -198,6 +196,12 @@ namespace Scheduler
 
         private void DailyStartingTB_EditValueChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
 
         }
     }
