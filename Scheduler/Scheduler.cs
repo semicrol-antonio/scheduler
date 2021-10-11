@@ -78,33 +78,34 @@ namespace Scheduler
             switch (Type)
             {
                 case RecurrenceTypes.Once:
-                    salida = OneOcurrence();
+                    salida.OcurrenceDate = OneOcurrence();
                     break;
                 case RecurrenceTypes.Daily:
-                    salida = DailyRecurrence(this.Periodicity );
+                    salida.OcurrenceDate  = DailyRecurrence(this.Periodicity );
                     break;
                 case RecurrenceTypes.Weekly:
-                    salida = WeeklyRecurrence();
+                    salida.OcurrenceDate = WeeklyRecurrence();
                     break;
                 default:
                     break;
             }
 
-            return salida;
-        }
-        private OutData OneOcurrence()
-        {
-            var salida = new OutData();
-
-            salida.OcurrenceDate = CurrentDate;
             salida.NextExecutionTime = salida.OcurrenceDate.ToString("dd/MM/yyyy HH:mm");
-            salida.Description = "Occurs Once.Schedule will be use on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") + " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + StartDate.ToString("dd/MM/yyyy");
+            salida.Description = DescriptionMount(salida);
 
             return salida;
         }
-        private OutData DailyRecurrence(int DailyPeriodicity)
+        private DateTime OneOcurrence()
         {
-            var salida = new OutData();
+            DateTime salida;
+
+            salida = CurrentDate;
+
+            return salida;
+        }
+        private DateTime DailyRecurrence(int DailyPeriodicity)
+        {
+            DateTime salida;
             DateTime HoraDesde = DateTime.MinValue;
             DateTime HoraHasta = DateTime.MinValue;
             DateTime WorkDateTime;
@@ -171,24 +172,22 @@ namespace Scheduler
             }
 
 
-            salida.OcurrenceDate  = WorkDateTime;
-            salida.NextExecutionTime = salida.OcurrenceDate.ToString("dd/MM/yyyy HH:mm");
-            salida.Description = "Occurs every " + Periodicity.ToString() + " day(s). Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") + HourlyDetail + " starting on " + StartDate.ToString("dd/MM/yyyy");
+            salida = WorkDateTime;
             
 
-            if (EndDate != DateTime.MinValue && salida.OcurrenceDate > EndDate)
+            if (EndDate != DateTime.MinValue && salida > EndDate)
                 throw new SchedulerException("La ocurrencia calculada supera la fecha limite establecido");
 
             return salida;
         }
-        private OutData WeeklyRecurrence()
+        private DateTime WeeklyRecurrence()
         {
-            var salida = new OutData();
+            DateTime salida;
             DateTime WorkDateTime;
             int WeekDay;
             bool Processed = false;
             int CurrentWeekNumber;
-            var salidatmp = new OutData();
+            DateTime salidatmp;
             bool WeekChanged = false;
 
             WorkDateTime = this.CurrentDate;
@@ -212,7 +211,7 @@ namespace Scheduler
                         {
                             this.CurrentDate = WorkDateTime;
                             salidatmp = DailyRecurrence(0);
-                            if (salidatmp.OcurrenceDate.ToString("dd/MM/yyyy") == WorkDateTime.ToString("dd/MM/yyyy"))
+                            if (salidatmp.ToString("dd/MM/yyyy") == WorkDateTime.ToString("dd/MM/yyyy"))
                                 return salidatmp;
                         }
                         else
@@ -244,12 +243,10 @@ namespace Scheduler
             }
 
 
-            salida.OcurrenceDate = WorkDateTime;
-            salida.NextExecutionTime = salida.OcurrenceDate.ToString("dd/MM/yyyy HH:mm");
-     //       salida.Description = "Occurs every " + Periodicity.ToString() + " day(s). Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") + HourlyDetail + " starting on " + StartDate.ToString("dd/MM/yyyy");
+            salida = WorkDateTime;
 
 
-            if (EndDate != DateTime.MinValue && salida.OcurrenceDate > EndDate)
+            if (EndDate != DateTime.MinValue && salida > EndDate)
                 throw new SchedulerException("La ocurrencia calculada supera la fecha limite establecido");
 
             return salida;
@@ -338,6 +335,104 @@ namespace Scheduler
             int weekNum = ciCurr.Calendar.GetWeekOfYear(ActualDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
             return weekNum;
         }
+        private string DescriptionMount(OutData salida)
+        {
+            string Description = "";
+
+            switch(this.Type)
+            {
+                case RecurrenceTypes.Once:
+                    Description = "Occurs One. Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
+                        " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
+
+                    break;
+                case RecurrenceTypes.Daily:
+                    Description = "Occurs every " + this.Periodicity + " day(s)";
+                    switch(this.HourlyFrecuency)
+                    {
+                        case HourlyFrecuencys.OccursOne:
+                            Description += " at " + this.HourlyOccursAt.ToString("HH:mm");
+                            break;
+                        case HourlyFrecuencys.OccursEvery:
+                            Description += ". Every " + this.HourlyOccursEvery   + " hour(s) between " + this.HourlyStartAt.ToString("HH:mm") + " and " + this.HourlyEndAt.ToString("HH:mm");
+                            break;
+                        default:
+                            break;
+                    }
+                    Description += ". Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
+                                 " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
+                    break;
+                case RecurrenceTypes.Weekly:
+                    Description = "Occurs every " + this.Periodicity + " week(s) on "+StringDays();
+                    switch (this.HourlyFrecuency)
+                    {
+                        case HourlyFrecuencys.OccursOne:
+                            Description += " at " + this.HourlyOccursAt.ToString("HH:mm");
+                            break;
+                        case HourlyFrecuencys.OccursEvery:
+                            Description += ". Every " + this.HourlyOccursEvery  + " hour(s) between " + this.HourlyStartAt.ToString("HH:mm") + " and " + this.HourlyEndAt.ToString("HH:mm");
+                            break;
+                        default:
+                            break;
+                    }
+                    Description += ". Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
+                                 " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
+
+                    break;
+
+            }
+
+            return Description;
+        }
+        private string StringDays()
+        {
+            string daystext = "";
+
+            if ((this.WeekDays & (int)WeekDaysEnum.Monday) != 0)
+            {
+                daystext = "Monday";
+            }
+            if ((this.WeekDays & (int)WeekDaysEnum.Tuesday) != 0)
+            {
+                if (daystext != "")
+                    daystext += ", ";
+                daystext += "Tuesday";
+            }
+            if ((this.WeekDays & (int)WeekDaysEnum.Wednesday) != 0)
+            {
+                if (daystext != "")
+                    daystext += ", ";
+                daystext += "Wednesday";
+            }
+            if ((this.WeekDays & (int)WeekDaysEnum.Thursday) != 0)
+            {
+                if (daystext != "")
+                    daystext += ", ";
+                daystext += "Thursday";
+            }
+            if ((this.WeekDays & (int)WeekDaysEnum.Friday ) != 0)
+            {
+                if (daystext != "")
+                    daystext += ", ";
+                daystext += "Friday";
+            }
+            if ((this.WeekDays & (int)WeekDaysEnum.Saturday ) != 0)
+            {
+                if (daystext != "")
+                    daystext += ", ";
+                daystext += "Saturday";
+            }
+            if ((this.WeekDays & (int)WeekDaysEnum.Sunday ) != 0)
+            {
+                if (daystext != "")
+                    daystext += ", ";
+                daystext += "Sunday";
+            }
+
+
+            return daystext;
+        }
+
     }
 }
 
