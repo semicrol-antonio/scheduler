@@ -23,34 +23,118 @@ namespace Scheduler
         private void CalculateBT_Click(object sender, EventArgs e)
         {
             var Gestor = new SchedulerManager();
+            var current = new OutData();
 
-            if (TypeLB.SelectedIndex == 0)
+            if (TypeLB.SelectedIndex == 0)     // Only one ocurrence
             {
                 try
                 {
-                    current = Gestor.NextOcurrence(RecurrenceTypes.Once, 0, StartDateTB.DateTime, EndDateTB.DateTime,DateTimeTB.DateTime);
-                    NextExecutionTB.Text = current.ToString("dd/MM/yyyy HH:mm");
-                    DescriptionTB.Text = "Occurs Once.Schedule will be use on " + current.ToString("dd/MM/yyyy") + " at " + current.ToString("HH:mm") + " starting on " + this.StartDateTB.DateTime.ToString("dd/MM/yyyy");
+                    Gestor.Type = RecurrenceTypes.Once;
+                    Gestor.Periodicity = 0;
+                    Gestor.StartDate = StartDateTB.DateTime;
+                    Gestor.EndDate = EndDateTB.DateTime;
+                    Gestor.CurrentDate = DateTimeTB.DateTime;
+
+                    current = Gestor.NextOcurrence();
+
+                    NextExecutionTB.Text = current.NextExecutionTime;
+                    DescriptionTB.Text = current.Description;
                 }
                 catch (SchedulerException ex)
                 {
                     MessageBox.Show(ex.Message);
                     return;
                 }
-            }
-            else
+            } else
             {
-                try
+                switch (OccursTB.SelectedIndex)
                 {
-                    current = Gestor.NextOcurrence(RecurrenceTypes.Daily, (int)EveryTB.Value, StartDateTB.DateTime, EndDateTB.DateTime, CurrentDateTB.DateTime);
-                    NextExecutionTB.Text = current.ToString("dd/MM/yyyy HH:mm");
-                    DescriptionTB.Text = "Occurs every " + EveryTB.Value.ToString() + " day(s). Schedule will be used on " + current.ToString("dd/MM/yyyy") + " starting on " + this.StartDateTB.DateTime.ToString("dd/MM/yyyy");
-                    CurrentDateTB.DateTime = current;
-                }
-                catch (SchedulerException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return;
+                    case 0:  // Daily Ocurrence
+                        try
+                        {
+                            Gestor.Type = RecurrenceTypes.Daily;
+                            Gestor.Periodicity = (int)EveryDayTB.Value;
+                            Gestor.StartDate = StartDateTB.DateTime;
+                            Gestor.EndDate = EndDateTB.DateTime;
+                            Gestor.CurrentDate = CurrentDateTB.DateTime;
+                            // Datos Frecuencia horaria
+                            if (DailyOccursAtCB.Checked == true)
+                            {
+                                Gestor.HourlyFrecuency = HourlyFrecuencys.OccursOne;
+                                Gestor.HourlyOccursAt = DailyOccursAtTB.Time;
+                            }
+                            if (DailyOccursEveryCB.Checked == true)
+                            {
+                                Gestor.HourlyFrecuency = HourlyFrecuencys.OccursEvery;
+                                Gestor.HourlyOccursEvery = (int)DailyOccursEveryTB.Value;
+                                Gestor.HourlyStartAt = DailyStartingTB.Time;
+                                Gestor.HourlyEndAt = this.DailyEndTB.Time;
+                            }
+
+                            current = Gestor.NextOcurrence();
+
+                            NextExecutionTB.Text = current.NextExecutionTime;
+                            DescriptionTB.Text = current.Description;
+                            CurrentDateTB.DateTime = current.OcurrenceDate;
+                        }
+                        catch (SchedulerException ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                            return;
+                        }
+                        break;
+                    case 1:  // Weekly Ocurrence
+                        try
+                        {
+                            Gestor.Type = RecurrenceTypes.Weekly;
+                            Gestor.Periodicity = (int)EveryDayTB.Value;
+                            Gestor.StartDate = StartDateTB.DateTime;
+                            Gestor.EndDate = EndDateTB.DateTime;
+                            Gestor.CurrentDate = CurrentDateTB.DateTime;
+                            // Datos Frecuencia horaria
+                            if (DailyOccursAtCB.Checked == true)
+                            {
+                                Gestor.HourlyFrecuency = HourlyFrecuencys.OccursOne;
+                                Gestor.HourlyOccursAt = DailyOccursAtTB.Time;
+                            }
+                            if (DailyOccursEveryCB.Checked == true)
+                            {
+                                Gestor.HourlyFrecuency = HourlyFrecuencys.OccursEvery;
+                                Gestor.HourlyOccursEvery = (int)DailyOccursEveryTB.Value;
+                                Gestor.HourlyStartAt = DailyStartingTB.Time;
+                                Gestor.HourlyEndAt = this.DailyEndTB.Time;
+                            }
+
+                            Gestor.Periodicity = (int)WeekEveryTB.Value;
+                            if (MondayCB.Checked)
+                                Gestor.WeekDays = (int)WeekDaysEnum.Monday;
+                            if (TuesdayCB.Checked)
+                                Gestor.WeekDays += (int)WeekDaysEnum.Tuesday;
+                            if (WeednesdayCB.Checked)
+                                Gestor.WeekDays += (int)WeekDaysEnum.Wednesday;
+                            if (ThrusdayCB.Checked)
+                                Gestor.WeekDays += (int)WeekDaysEnum.Thursday;
+                            if (FridayCB.Checked)
+                                Gestor.WeekDays += (int)WeekDaysEnum.Friday;
+                            if (SaturdayCB.Checked)
+                                Gestor.WeekDays += (int)WeekDaysEnum.Saturday;
+                            if (SundayCB.Checked)
+                                Gestor.WeekDays += (int)WeekDaysEnum.Sunday;
+
+
+
+                            current = Gestor.NextOcurrence();
+
+                            NextExecutionTB.Text = current.NextExecutionTime;
+                            DescriptionTB.Text = current.Description;
+                            CurrentDateTB.DateTime = current.OcurrenceDate;
+                        }
+                        catch (SchedulerException ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                            return;
+                        }
+                        break;
                 }
             }
         }
@@ -58,6 +142,63 @@ namespace Scheduler
         private void Form1_Load(object sender, EventArgs e)
         {
             CurrentDateTB.DateTime = DateTime.Today;
+        }
+
+        private void DailyEndTB_EditValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DailyOccursAtTB_EditValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DailyOccursAtCB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DailyOccursAtCB.Checked == true)
+            {
+                DailyOccursAtTB.Enabled = true;
+
+                DailyOccursEveryCB.Checked = false;
+            } else
+            {
+                DailyOccursAtTB.Enabled = false;
+            }
+        }
+
+        private void DailyOccursEveryCB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DailyOccursEveryCB.Checked == true)
+            {
+
+                DailyOccursAtCB.Checked = false;
+
+                DailyOccursEveryTB.Enabled = true;
+                DailyOccursEveryCM.Enabled = true;
+                DailyStartingTB.Enabled = true;
+                DailyEndTB.Enabled = true;
+
+            }
+            else
+            {
+                DailyOccursEveryTB.Enabled = false;
+
+                DailyOccursEveryTB.Enabled = false;
+                DailyOccursEveryCM.Enabled = false;
+                DailyStartingTB.Enabled = false;
+                DailyEndTB.Enabled = false;
+            }
+        }
+
+        private void DailyOccursEveryCM_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DailyStartingTB_EditValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
