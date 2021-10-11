@@ -73,8 +73,7 @@ namespace Scheduler
 
             
             OutData salida = new OutData();
-
-            
+           
             switch (Type)
             {
                 case RecurrenceTypes.Once:
@@ -89,6 +88,14 @@ namespace Scheduler
                 default:
                     break;
             }
+
+            // Comprueba que no sea anterior a la fecha de inicio
+            if (this.StartDate != DateTime.MinValue && salida.OcurrenceDate < StartDate)
+                throw new SchedulerException("La ocurrencia calculada es anterior a la fecha de inicio establecida.");
+
+
+            if (this.EndDate != DateTime.MinValue && salida.OcurrenceDate > EndDate)
+                throw new SchedulerException("La ocurrencia calculada supera la fecha limite establecida.");
 
             salida.NextExecutionTime = salida.OcurrenceDate.ToString("dd/MM/yyyy HH:mm");
             salida.Description = DescriptionMount(salida);
@@ -111,7 +118,6 @@ namespace Scheduler
             DateTime WorkDateTime;
             bool Processed;
             DateTime ActualDate;
-            string HourlyDetail = "";
 
             WorkDateTime = this.CurrentDate;
             switch (this.HourlyFrecuency)
@@ -119,8 +125,6 @@ namespace Scheduler
                 case HourlyFrecuencys.OccursOne:
                     WorkDateTime = CurrentDate.AddDays(DailyPeriodicity);
                     WorkDateTime = WorkDateTime.SetTime(this.HourlyOccursAt.Hour, this.HourlyOccursAt.Minute, this.HourlyOccursAt.Second);
-
-                    HourlyDetail = ", at " + WorkDateTime.ToString("HH:mm:ss");
                     break;
                 case HourlyFrecuencys.OccursEvery:
                     // Establece limites horarios en caso de llegar vacios se estable el limite entre las 0 horas y las 23:59
@@ -173,10 +177,6 @@ namespace Scheduler
 
 
             salida = WorkDateTime;
-            
-
-            if (EndDate != DateTime.MinValue && salida > EndDate)
-                throw new SchedulerException("La ocurrencia calculada supera la fecha limite establecido");
 
             return salida;
         }
@@ -190,10 +190,9 @@ namespace Scheduler
             DateTime salidatmp;
             bool WeekChanged = false;
 
+
             WorkDateTime = this.CurrentDate;
             CurrentWeekNumber = GetWeekNumber(WorkDateTime);
-
-
             while (Processed == false)
             {
                 if (HourlyFrecuency != HourlyFrecuencys.OccursEvery && WeekChanged == false)
@@ -244,11 +243,6 @@ namespace Scheduler
 
 
             salida = WorkDateTime;
-
-
-            if (EndDate != DateTime.MinValue && salida > EndDate)
-                throw new SchedulerException("La ocurrencia calculada supera la fecha limite establecido");
-
             return salida;
         }
         private bool DayOfWeekIncluded(DateTime WorkDateTime)
