@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 namespace Scheduler
 
 {
-    public enum RecurrenceTypes
+    public enum RecurrenceTypesEnum
     {
         Once,
         Daily,
-        Weekly,
-        Monthly
+        Weekly
     }
-    public enum TimeInterval
+    public enum TimeIntervalEnum
     {
         Hours,
         Minutes,
@@ -31,7 +30,7 @@ namespace Scheduler
         Friday = 32,
         Saturday = 64
     }
-    public enum HourlyFrecuencys
+    public enum HourlyFrecuencysEnum
     {
         None,
         OccursOne,
@@ -52,7 +51,7 @@ namespace Scheduler
     }
     public class SchedulerManager
     {
-        public RecurrenceTypes Type;
+        public RecurrenceTypesEnum Type;
         public int Periodicity;
         public DateTime StartDate;
         public DateTime EndDate;
@@ -60,10 +59,10 @@ namespace Scheduler
         public int WeekDays = 0;
 
         // Hourly Frecuency;
-        public HourlyFrecuencys HourlyFrecuency;
+        public HourlyFrecuencysEnum HourlyFrecuency;
         public DateTime HourlyOccursAt;
         public int HourlyOccursEvery;
-        public TimeInterval HourlyOccursEveryInterval;
+        public TimeIntervalEnum HourlyOccursEveryInterval;
         public DateTime HourlyStartAt;
         public DateTime HourlyEndAt;
 
@@ -76,22 +75,17 @@ namespace Scheduler
            
             switch (Type)
             {
-                case RecurrenceTypes.Once:
+                case RecurrenceTypesEnum.Once:
                     salida.OcurrenceDate = OneOcurrence();
                     break;
-                case RecurrenceTypes.Daily:
-                    salida.OcurrenceDate  = DailyRecurrence(this.Periodicity );
+                case RecurrenceTypesEnum.Daily:
+                    salida.OcurrenceDate  = DailyRecurrence(this.Periodicity);
                     break;
-                case RecurrenceTypes.Weekly:
+                case RecurrenceTypesEnum.Weekly:
                     salida.OcurrenceDate = WeeklyRecurrence();
                     break;
-                default:
-                    break;
-            }
 
-            // Comprueba que no sea anterior a la fecha de inicio
-            if (this.StartDate != DateTime.MinValue && salida.OcurrenceDate < StartDate)
-                throw new SchedulerException("La ocurrencia calculada es anterior a la fecha de inicio establecida.");
+            }
 
 
             if (this.EndDate != DateTime.MinValue && salida.OcurrenceDate > EndDate)
@@ -122,21 +116,14 @@ namespace Scheduler
             WorkDateTime = this.CurrentDate;
             switch (this.HourlyFrecuency)
             {
-                case HourlyFrecuencys.OccursOne:
+                case HourlyFrecuencysEnum.OccursOne:
                     WorkDateTime = CurrentDate.AddDays(DailyPeriodicity);
                     WorkDateTime = WorkDateTime.SetTime(this.HourlyOccursAt.Hour, this.HourlyOccursAt.Minute, this.HourlyOccursAt.Second);
                     break;
-                case HourlyFrecuencys.OccursEvery:
+                case HourlyFrecuencysEnum.OccursEvery:
                     // Establece limites horarios en caso de llegar vacios se estable el limite entre las 0 horas y las 23:59
-                    if (this.HourlyStartAt.Hour != 0)
-                        HoraDesde = HoraDesde.SetTime(this.HourlyStartAt.Hour, this.HourlyStartAt.Minute);
-                    else
-                        HoraDesde = HoraDesde.SetTime(0, 0);
-
-                    if (this.HourlyEndAt.Hour != 0)
-                        HoraHasta = HoraHasta.SetTime(this.HourlyEndAt.Hour, this.HourlyEndAt.Minute);
-                    else
-                        HoraHasta = HoraHasta.SetTime(23, 59);
+                    HoraDesde = HoraDesde.SetTime(this.HourlyStartAt.Hour, this.HourlyStartAt.Minute);
+                    HoraHasta = HoraHasta.SetTime(this.HourlyEndAt.Hour, this.HourlyEndAt.Minute);
 
                     Processed = false;
                     while (Processed == false)
@@ -155,6 +142,8 @@ namespace Scheduler
                                 WorkDateTime = ActualDate;
                                 WorkDateTime = WorkDateTime.AddDays(Periodicity);
                                 WorkDateTime = WorkDateTime.SetTime(0, 0);
+                                if (WorkDateTime.Hour == HoraDesde.Hour)
+                                    Processed = true;
                             }
                             else
                             {
@@ -195,7 +184,7 @@ namespace Scheduler
             CurrentWeekNumber = GetWeekNumber(WorkDateTime);
             while (Processed == false)
             {
-                if (HourlyFrecuency != HourlyFrecuencys.OccursEvery && WeekChanged == false)
+                if (HourlyFrecuency != HourlyFrecuencysEnum.OccursEvery && WeekChanged == false)
                 {
                     WorkDateTime = WorkDateTime.AddDays(1);
                     WorkDateTime = WorkDateTime.SetTime(0, 0, 0);
@@ -206,8 +195,9 @@ namespace Scheduler
 
                     if (DayOfWeekIncluded(WorkDateTime))
                     {
-                        if (this.HourlyFrecuency != HourlyFrecuencys.None)
+                        if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
                         {
+                            // Enlaza con la frecuencia diaria 
                             this.CurrentDate = WorkDateTime;
                             salidatmp = DailyRecurrence(0);
                             if (salidatmp.ToString("dd/MM/yyyy") == WorkDateTime.ToString("dd/MM/yyyy"))
@@ -216,13 +206,14 @@ namespace Scheduler
                         else
                             Processed = true;
                     }
-                    if (Processed == false && this.HourlyFrecuency == HourlyFrecuencys.OccursEvery )
+                    if (Processed == false && this.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery )
                     {
                         WorkDateTime = WorkDateTime.AddDays(1);
                         WorkDateTime = WorkDateTime.SetTime(0, 0, 0);
                     }
                 } 
                 else
+                // Si ha cambiado la semana se avanza el número de semanas indicado en Periodicity
                 {
                     if (Processed == false)
                     {
@@ -230,8 +221,6 @@ namespace Scheduler
                         WeekDay = (int)WorkDateTime.DayOfWeek;
                         if (WeekDay == 0)
                             WeekDay = 6;
-                        else
-                            WeekDay--;
 
                         WorkDateTime = WorkDateTime.AddDays(WeekDay * (-1));   // Ajusta al lunes de la semana actual
                         WorkDateTime = WorkDateTime.AddDays(7 * this.Periodicity);  // Avanza las semanas indicadas
@@ -281,47 +270,40 @@ namespace Scheduler
         }
         private void InputValidations()
         {
-            // Comprueba que se han indicado algun dia de la semana en la recurrencia semanal
-            if (this.Type == RecurrenceTypes.Weekly && this.WeekDays == 0)
-                throw new SchedulerException("Debe indicarse algún día de la semana para la aplicación de la recurrencia semanal.");
+            // Comprueba que se pase la fecha actual para el calculo de la siguiente ocurrencia
+            if (CurrentDate == DateTime.MinValue)
+                throw new SchedulerException("Debe indicar una fecha actual para el calculo de la siguiente ocurrencia");
 
-            // Se comprueba que la hora desde no es superior a la hora hasta
-            if (this.HourlyFrecuency == HourlyFrecuencys.OccursEvery && this.HourlyStartAt > this.HourlyEndAt )
-                throw new SchedulerException("La hora 'desde' debe ser inferior a la hora 'hasta'.");
-
-            // Se pone la periocidad a 1 si es menor o igual a 0
-            if (this.Type == RecurrenceTypes.Daily && this.Periodicity <= 0)
-                throw new SchedulerException("La Periodicidad debe ser superior a 0'.");
-            // Comprueba que se envia la fecha de inicio
             if (StartDate == DateTime.MinValue)
                 throw new SchedulerException("Debe indicar la fecha limite de inicio.");
 
-            switch (Type)
-            {
-                case RecurrenceTypes.Once:
-                    if (CurrentDate == DateTime.MinValue)
-                        throw new SchedulerException("Cuando la ejecución es de tipo único debe indicarse la fecha y hora de ejecución");
+            // Se comprueba que la periodicidad no es igual o inferior a 0 cuando es de tipo diario o semanal
+            if ((this.Type == RecurrenceTypesEnum.Daily || this.Type == RecurrenceTypesEnum.Weekly) && this.Periodicity <= 0)
+                throw new SchedulerException("La Periodicidad debe ser superior a 0.");
 
-                    break;
-                case RecurrenceTypes.Daily:
-                    // Comprueba que se ha enviado la fecha actual
-                    if (CurrentDate == DateTime.MinValue)
-                        throw new SchedulerException("Debe indicar una fecha actual para el calculo de la siguiente ocurrencia");
 
-                    // Si se envia la fecha de inicio y la actual es inferior 
-                    if (StartDate != DateTime.MinValue && CurrentDate < StartDate)
-                        throw new SchedulerException("La fecha de calculo es inferior a la fecha de inicio establecida");
+            // Se comprueba el currentdate no sea inferior a la fecha de inicio
+            if (StartDate != DateTime.MinValue && CurrentDate < StartDate)
+                throw new SchedulerException("La fecha de calculo es inferior a la fecha de inicio establecida");
 
-                    // Comprueba que la periodicidad es mayor que 0
-                    if (Periodicity <= 0)
-                        throw new SchedulerException("La Periocididad debe tener un valor superior a 0");
+            // Se comprueba que la hora desde no es superior a la hora hasta en modo hourly
+            if (this.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery && this.HourlyStartAt > this.HourlyEndAt)
+                throw new SchedulerException("La hora 'desde' debe ser inferior a la hora 'hasta'.");
 
-                    break;
-                case RecurrenceTypes.Weekly:
-                    break;
-                default:
-                    break;
-            }
+            // Comprueba que se han indicado algun dia de la semana en la recurrencia semanal
+            if (this.Type == RecurrenceTypesEnum.Weekly && this.WeekDays == 0)
+                throw new SchedulerException("Debe indicarse algún día de la semana para la aplicación de la recurrencia semanal.");
+
+            // Si se indica periodicidad horaria se comprueba que se han indicado la hora de limite desde-hasta
+            if (this.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery && this.HourlyStartAt == DateTime.MinValue && this.HourlyEndAt == DateTime.MinValue)
+                throw new SchedulerException("Debe indicarse las horas limite cuando el modo horario es periodico.");
+
+            // Si estamos en modo hourly periodico se comprueba que se envia la periodicidad de horas
+            if (this.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery && this.HourlyOccursEvery <= 0)
+                throw new SchedulerException("Debe indicarse un valor para la periodicidad horaria.");
+
+
+
         }
         private int GetWeekNumber(DateTime ActualDate)
         {
@@ -335,19 +317,19 @@ namespace Scheduler
 
             switch(this.Type)
             {
-                case RecurrenceTypes.Once:
+                case RecurrenceTypesEnum.Once:
                     Description = "Occurs One. Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
                         " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
 
                     break;
-                case RecurrenceTypes.Daily:
+                case RecurrenceTypesEnum.Daily:
                     Description = "Occurs every " + this.Periodicity + " day(s)";
                     switch(this.HourlyFrecuency)
                     {
-                        case HourlyFrecuencys.OccursOne:
+                        case HourlyFrecuencysEnum.OccursOne:
                             Description += " at " + this.HourlyOccursAt.ToString("HH:mm");
                             break;
-                        case HourlyFrecuencys.OccursEvery:
+                        case HourlyFrecuencysEnum.OccursEvery:
                             Description += ". Every " + this.HourlyOccursEvery   + " hour(s) between " + this.HourlyStartAt.ToString("HH:mm") + " and " + this.HourlyEndAt.ToString("HH:mm");
                             break;
                         default:
@@ -356,14 +338,14 @@ namespace Scheduler
                     Description += ". Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
                                  " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
                     break;
-                case RecurrenceTypes.Weekly:
+                case RecurrenceTypesEnum.Weekly:
                     Description = "Occurs every " + this.Periodicity + " week(s) on "+StringDays();
                     switch (this.HourlyFrecuency)
                     {
-                        case HourlyFrecuencys.OccursOne:
+                        case HourlyFrecuencysEnum.OccursOne:
                             Description += " at " + this.HourlyOccursAt.ToString("HH:mm");
                             break;
-                        case HourlyFrecuencys.OccursEvery:
+                        case HourlyFrecuencysEnum.OccursEvery:
                             Description += ". Every " + this.HourlyOccursEvery  + " hour(s) between " + this.HourlyStartAt.ToString("HH:mm") + " and " + this.HourlyEndAt.ToString("HH:mm");
                             break;
                         default:

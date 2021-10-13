@@ -40,8 +40,6 @@ namespace Scheduler
             this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.OccursTB = new DevExpress.XtraEditors.ComboBoxEdit();
-            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
-            this.DateTimeTB = new DevExpress.XtraEditors.DateEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.TypeLB = new DevExpress.XtraEditors.ComboBoxEdit();
             this.groupControl3 = new DevExpress.XtraEditors.GroupControl();
@@ -84,8 +82,6 @@ namespace Scheduler
             this.groupControl2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EveryDayTB.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OccursTB.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DateTimeTB.Properties.CalendarTimeProperties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DateTimeTB.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TypeLB.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).BeginInit();
             this.groupControl3.SuspendLayout();
@@ -170,19 +166,17 @@ namespace Scheduler
             this.groupControl2.Controls.Add(this.labelControl5);
             this.groupControl2.Controls.Add(this.labelControl4);
             this.groupControl2.Controls.Add(this.OccursTB);
-            this.groupControl2.Controls.Add(this.labelControl3);
-            this.groupControl2.Controls.Add(this.DateTimeTB);
             this.groupControl2.Controls.Add(this.labelControl2);
             this.groupControl2.Controls.Add(this.TypeLB);
             this.groupControl2.Location = new System.Drawing.Point(12, 98);
             this.groupControl2.Name = "groupControl2";
-            this.groupControl2.Size = new System.Drawing.Size(590, 112);
+            this.groupControl2.Size = new System.Drawing.Size(590, 90);
             this.groupControl2.TabIndex = 3;
             this.groupControl2.Text = "Configuration";
             // 
             // labelControl6
             // 
-            this.labelControl6.Location = new System.Drawing.Point(484, 89);
+            this.labelControl6.Location = new System.Drawing.Point(485, 66);
             this.labelControl6.Name = "labelControl6";
             this.labelControl6.Size = new System.Drawing.Size(31, 13);
             this.labelControl6.TabIndex = 9;
@@ -195,7 +189,7 @@ namespace Scheduler
             0,
             0,
             0});
-            this.EveryDayTB.Location = new System.Drawing.Point(407, 82);
+            this.EveryDayTB.Location = new System.Drawing.Point(408, 59);
             this.EveryDayTB.Name = "EveryDayTB";
             this.EveryDayTB.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
@@ -206,7 +200,7 @@ namespace Scheduler
             // 
             // labelControl5
             // 
-            this.labelControl5.Location = new System.Drawing.Point(373, 85);
+            this.labelControl5.Location = new System.Drawing.Point(374, 62);
             this.labelControl5.Name = "labelControl5";
             this.labelControl5.Size = new System.Drawing.Size(28, 13);
             this.labelControl5.TabIndex = 7;
@@ -214,7 +208,7 @@ namespace Scheduler
             // 
             // labelControl4
             // 
-            this.labelControl4.Location = new System.Drawing.Point(15, 85);
+            this.labelControl4.Location = new System.Drawing.Point(16, 62);
             this.labelControl4.Name = "labelControl4";
             this.labelControl4.Size = new System.Drawing.Size(33, 13);
             this.labelControl4.TabIndex = 6;
@@ -223,7 +217,7 @@ namespace Scheduler
             // OccursTB
             // 
             this.OccursTB.EditValue = "Daily";
-            this.OccursTB.Location = new System.Drawing.Point(96, 82);
+            this.OccursTB.Location = new System.Drawing.Point(97, 59);
             this.OccursTB.Name = "OccursTB";
             this.OccursTB.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
@@ -233,29 +227,6 @@ namespace Scheduler
             this.OccursTB.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.OccursTB.Size = new System.Drawing.Size(107, 20);
             this.OccursTB.TabIndex = 5;
-            // 
-            // labelControl3
-            // 
-            this.labelControl3.Location = new System.Drawing.Point(15, 59);
-            this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(48, 13);
-            this.labelControl3.TabIndex = 4;
-            this.labelControl3.Text = "Date Time";
-            // 
-            // DateTimeTB
-            // 
-            this.DateTimeTB.EditValue = null;
-            this.DateTimeTB.Location = new System.Drawing.Point(96, 56);
-            this.DateTimeTB.Name = "DateTimeTB";
-            this.DateTimeTB.Properties.BeepOnError = false;
-            this.DateTimeTB.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.DateTimeTB.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.DateTimeTB.Properties.MaskSettings.Set("mask", "g");
-            this.DateTimeTB.Properties.UseMaskAsDisplayFormat = true;
-            this.DateTimeTB.Size = new System.Drawing.Size(419, 20);
-            this.DateTimeTB.TabIndex = 4;
             // 
             // labelControl2
             // 
@@ -642,8 +613,6 @@ namespace Scheduler
             this.groupControl2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EveryDayTB.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OccursTB.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DateTimeTB.Properties.CalendarTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DateTimeTB.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TypeLB.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).EndInit();
             this.groupControl3.ResumeLayout(false);
@@ -693,8 +662,6 @@ namespace Scheduler
         private DevExpress.XtraEditors.ComboBoxEdit TypeLB;
         private DevExpress.XtraEditors.LabelControl labelControl4;
         private DevExpress.XtraEditors.ComboBoxEdit OccursTB;
-        private DevExpress.XtraEditors.LabelControl labelControl3;
-        private DevExpress.XtraEditors.DateEdit DateTimeTB;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.LabelControl labelControl6;
         private DevExpress.XtraEditors.SpinEdit EveryDayTB;

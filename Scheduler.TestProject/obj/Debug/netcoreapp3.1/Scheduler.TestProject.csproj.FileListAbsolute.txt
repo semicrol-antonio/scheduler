@@ -98,3 +98,7 @@ C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\obj\Debug\netcorea
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\obj\Debug\netcoreapp3.1\Scheduler.TestProject.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\obj\Debug\netcoreapp3.1\Scheduler.TestProject.pdb
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\obj\Debug\netcoreapp3.1\Scheduler.TestProject.genruntimeconfig.cache
+C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\FluentAssertions.dll
+C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
+C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll

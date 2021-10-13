@@ -1,0 +1,4 @@
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\0\b\Scheduler\bin\Debug\Scheduler.dll
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\0\i\Scheduler\Debug\Scheduler.csproj.CoreCompileInputs.cache
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\0\i\Scheduler\Debug\Scheduler.csproj.CopyComplete
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\0\i\Scheduler\Debug\Scheduler.dll

@@ -29,11 +29,11 @@ namespace Scheduler
             {
                 try
                 {
-                    Gestor.Type = RecurrenceTypes.Once;
+                    Gestor.Type = RecurrenceTypesEnum.Once;
                     Gestor.Periodicity = 0;
                     Gestor.StartDate = StartDateTB.DateTime;
                     Gestor.EndDate = EndDateTB.DateTime;
-                    Gestor.CurrentDate = DateTimeTB.DateTime;
+                    Gestor.CurrentDate = CurrentDateTB.DateTime;
 
                     current = Gestor.NextOcurrence();
 
@@ -52,7 +52,7 @@ namespace Scheduler
                     case 0:  // Daily Ocurrence
                         try
                         {
-                            Gestor.Type = RecurrenceTypes.Daily;
+                            Gestor.Type = RecurrenceTypesEnum.Daily;
                             Gestor.Periodicity = (int)EveryDayTB.Value;
                             Gestor.StartDate = StartDateTB.DateTime;
                             Gestor.EndDate = EndDateTB.DateTime;
@@ -60,12 +60,12 @@ namespace Scheduler
                             // Datos Frecuencia horaria
                             if (DailyOccursAtCB.Checked == true)
                             {
-                                Gestor.HourlyFrecuency = HourlyFrecuencys.OccursOne;
+                                Gestor.HourlyFrecuency = HourlyFrecuencysEnum.OccursOne;
                                 Gestor.HourlyOccursAt = DailyOccursAtTB.Time;
                             }
                             if (DailyOccursEveryCB.Checked == true)
                             {
-                                Gestor.HourlyFrecuency = HourlyFrecuencys.OccursEvery;
+                                Gestor.HourlyFrecuency = HourlyFrecuencysEnum.OccursEvery;
                                 Gestor.HourlyOccursEvery = (int)DailyOccursEveryTB.Value;
                                 Gestor.HourlyStartAt = DailyStartingTB.Time;
                                 Gestor.HourlyEndAt = this.DailyEndTB.Time;
@@ -86,7 +86,7 @@ namespace Scheduler
                     case 1:  // Weekly Ocurrence
                         try
                         {
-                            Gestor.Type = RecurrenceTypes.Weekly;
+                            Gestor.Type = RecurrenceTypesEnum.Weekly;
                             Gestor.Periodicity = (int)EveryDayTB.Value;
                             Gestor.StartDate = StartDateTB.DateTime;
                             Gestor.EndDate = EndDateTB.DateTime;
@@ -94,12 +94,12 @@ namespace Scheduler
                             // Datos Frecuencia horaria
                             if (DailyOccursAtCB.Checked == true)
                             {
-                                Gestor.HourlyFrecuency = HourlyFrecuencys.OccursOne;
+                                Gestor.HourlyFrecuency = HourlyFrecuencysEnum.OccursOne;
                                 Gestor.HourlyOccursAt = DailyOccursAtTB.Time;
                             }
                             if (DailyOccursEveryCB.Checked == true)
                             {
-                                Gestor.HourlyFrecuency = HourlyFrecuencys.OccursEvery;
+                                Gestor.HourlyFrecuency = HourlyFrecuencysEnum.OccursEvery;
                                 Gestor.HourlyOccursEvery = (int)DailyOccursEveryTB.Value;
                                 Gestor.HourlyStartAt = DailyStartingTB.Time;
                                 Gestor.HourlyEndAt = this.DailyEndTB.Time;
