@@ -173,7 +173,6 @@ namespace Scheduler
         {
             DateTime salida;
             DateTime WorkDateTime;
-            int WeekDay;
             bool Processed = false;
             int CurrentWeekNumber;
             DateTime salidatmp;
@@ -217,12 +216,7 @@ namespace Scheduler
                 {
                     if (Processed == false)
                     {
-                        WorkDateTime = WorkDateTime.AddDays(-1);
-                        WeekDay = (int)WorkDateTime.DayOfWeek;
-                        if (WeekDay == 0)
-                            WeekDay = 6;
-
-                        WorkDateTime = WorkDateTime.AddDays(WeekDay * (-1));   // Ajusta al lunes de la semana actual
+                        WorkDateTime = WorkDateTime.AddDays(7 * (-1));   // Ajusta al lunes de la semana actual
                         WorkDateTime = WorkDateTime.AddDays(7 * this.Periodicity);  // Avanza las semanas indicadas
                         CurrentWeekNumber = GetWeekNumber(WorkDateTime);
                         WeekChanged = true; 
