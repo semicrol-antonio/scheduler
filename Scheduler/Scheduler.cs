@@ -12,7 +12,8 @@ namespace Scheduler
     {
         Once,
         Daily,
-        Weekly
+        Weekly,
+        Monthly
     }
     public enum TimeIntervalEnum
     {
@@ -28,13 +29,29 @@ namespace Scheduler
         Wednesday = 8,
         Thursday = 16,
         Friday = 32,
-        Saturday = 64
+        Saturday = 64,
+        WeekDays = Monday | Tuesday | Wednesday | Thursday | Friday,
+        WeekendDays = Saturday | Sunday,
+        Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
     }
     public enum HourlyFrecuencysEnum
     {
         None,
         OccursOne,
         OccursEvery
+    }
+    public enum MonthlyFrecuencyEnum
+    {
+        FixedDay,
+        DayPosition
+    }
+    public enum DayPositionEnum 
+    {
+        First,
+        Second,
+        Third,
+        Fourth,
+        Last
     }
     public struct OutData
     {
@@ -65,6 +82,13 @@ namespace Scheduler
         public TimeIntervalEnum HourlyOccursEveryInterval;
         public DateTime HourlyStartAt;
         public DateTime HourlyEndAt;
+        // Monthly Frecuency;
+        public MonthlyFrecuencyEnum MonthlyFrecuency;
+        public int MonthlyDay;
+        public DayPositionEnum MonthlyDayPosition;
+
+
+
 
         public OutData NextOcurrence()
         {
@@ -79,10 +103,13 @@ namespace Scheduler
                     salida.OcurrenceDate = OneOcurrence();
                     break;
                 case RecurrenceTypesEnum.Daily:
-                    salida.OcurrenceDate  = DailyRecurrence(this.Periodicity);
+                    salida.OcurrenceDate  = DailyRecurrence(this.CurrentDate ,this.Periodicity);
                     break;
                 case RecurrenceTypesEnum.Weekly:
                     salida.OcurrenceDate = WeeklyRecurrence();
+                    break;
+                case RecurrenceTypesEnum.Monthly:
+                    salida.OcurrenceDate = MonthlyRecurrence();
                     break;
 
             }
@@ -104,158 +131,269 @@ namespace Scheduler
 
             return salida;
         }
-        private DateTime DailyRecurrence(int DailyPeriodicity)
+        private DateTime HourlyRecurrence(DateTime CurrentDate,bool First)
         {
-            DateTime salida;
-            DateTime HoraDesde = DateTime.MinValue;
-            DateTime HoraHasta = DateTime.MinValue;
             DateTime WorkDateTime;
-            bool Processed;
-            DateTime ActualDate;
 
-            WorkDateTime = this.CurrentDate;
+            WorkDateTime = CurrentDate;
             switch (this.HourlyFrecuency)
             {
                 case HourlyFrecuencysEnum.OccursOne:
-                    WorkDateTime = CurrentDate.AddDays(DailyPeriodicity);
-                    WorkDateTime = WorkDateTime.SetTime(this.HourlyOccursAt.Hour, this.HourlyOccursAt.Minute, this.HourlyOccursAt.Second);
+                    if (new DateTime(1001, 1, 1, WorkDateTime.Hour, WorkDateTime.Minute, 0) < new DateTime(1001, 1, 1, this.HourlyOccursAt.Hour, this.HourlyOccursAt.Minute, 0))
+                        WorkDateTime = WorkDateTime.SetTime(this.HourlyOccursAt.Hour, this.HourlyOccursAt.Minute, this.HourlyOccursAt.Second);
+                    else
+                        WorkDateTime = DateTime.MinValue;
                     break;
                 case HourlyFrecuencysEnum.OccursEvery:
-                    // Establece limites horarios en caso de llegar vacios se estable el limite entre las 0 horas y las 23:59
-                    HoraDesde = HoraDesde.SetTime(this.HourlyStartAt.Hour, this.HourlyStartAt.Minute);
-                    HoraHasta = HoraHasta.SetTime(this.HourlyEndAt.Hour, this.HourlyEndAt.Minute);
-
-                    Processed = false;
-                    while (Processed == false)
+                    if (First)
                     {
-                        if (WorkDateTime.Hour < HoraDesde.Hour)
-                        {
-                            WorkDateTime = WorkDateTime.SetTime(HoraDesde.Hour);
-                            Processed = true;
-                        }
-                        else
-                        {
-                            ActualDate = WorkDateTime.Date;
-                            WorkDateTime = WorkDateTime.AddHours(this.HourlyOccursEvery);
-                            if (ActualDate.ToString("dd/MM/YYYY") != WorkDateTime.ToString("dd/MM/YYYY"))
-                            {
-                                WorkDateTime = ActualDate;
-                                WorkDateTime = WorkDateTime.AddDays(Periodicity);
-                                WorkDateTime = WorkDateTime.SetTime(0, 0);
-                                if (WorkDateTime.Hour == HoraDesde.Hour)
-                                    Processed = true;
-                            }
-                            else
-                            {
-                                if (WorkDateTime.Hour > HoraHasta.Hour)
-                                {
-                                    WorkDateTime = WorkDateTime.AddDays(Periodicity);
-                                    WorkDateTime = WorkDateTime.SetTime(0, 0);
-                                }
-                                else
-                                    Processed = true;
+                        if (WorkDateTime.Hour == 0 && this.HourlyStartAt.Hour == 0)
+                            return WorkDateTime;
+                    }
+                    int NextHour = NextHourInterval(WorkDateTime.Hour);
+                    if (NextHour != -1)
+                        WorkDateTime = WorkDateTime.SetTime(NextHour);
+                    else
+                        WorkDateTime = DateTime.MinValue;
+                    break;
+            }
+            return WorkDateTime;
+        }
 
-                            }
-                        }
+        private DateTime DailyRecurrence(DateTime CurrentDate,int DailyPeriodicity)
+        {
+            DateTime Salida;
+            DateTime WorkDateTime;
+
+            WorkDateTime = CurrentDate;
+            switch (this.HourlyFrecuency)
+            {
+                case HourlyFrecuencysEnum.OccursOne:
+                    Salida = HourlyRecurrence(WorkDateTime,false);
+                    if (Salida != DateTime.MinValue)
+                        WorkDateTime = Salida;
+                    else
+                    {
+                        WorkDateTime = CurrentDate.AddDays(DailyPeriodicity);
+                        WorkDateTime = WorkDateTime.SetTime(this.HourlyOccursAt.Hour, this.HourlyOccursAt.Minute, this.HourlyOccursAt.Second);
+                    }
+                    break;
+                case HourlyFrecuencysEnum.OccursEvery:
+                    Salida = HourlyRecurrence(WorkDateTime,false);
+                    if (Salida != DateTime.MinValue)
+                        WorkDateTime = Salida;
+                    else
+                    {
+                        WorkDateTime = WorkDateTime.AddDays(Periodicity);
+                        WorkDateTime = WorkDateTime.SetTime(this.HourlyStartAt.Hour, 0);
                     }
                     break;
                 default:
                     WorkDateTime = WorkDateTime.AddDays(Periodicity);
                     break;
             }
-
-
-            salida = WorkDateTime;
-
-            return salida;
+            return WorkDateTime;
         }
         private DateTime WeeklyRecurrence()
         {
-            DateTime salida;
             DateTime WorkDateTime;
             bool Processed = false;
             int CurrentWeekNumber;
             DateTime salidatmp;
-            bool WeekChanged = false;
 
 
             WorkDateTime = this.CurrentDate;
             CurrentWeekNumber = GetWeekNumber(WorkDateTime);
             while (Processed == false)
             {
-                if (HourlyFrecuency != HourlyFrecuencysEnum.OccursEvery && WeekChanged == false)
+                if (DayOfWeekIncluded(WorkDateTime))
                 {
-                    WorkDateTime = WorkDateTime.AddDays(1);
-                    WorkDateTime = WorkDateTime.SetTime(0, 0, 0);
-                }
-                WeekChanged = false;
-                if (CurrentWeekNumber == GetWeekNumber(WorkDateTime))
-                {
-
-                    if (DayOfWeekIncluded(WorkDateTime))
+                    if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
                     {
-                        if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
+                        var tmp_datetime = this.HourlyRecurrence(WorkDateTime,WorkDateTime != this.CurrentDate );
+                        if (tmp_datetime != DateTime.MinValue)
                         {
-                            // Enlaza con la frecuencia diaria 
-                            this.CurrentDate = WorkDateTime;
-                            salidatmp = DailyRecurrence(0);
-                            if (salidatmp.ToString("dd/MM/yyyy") == WorkDateTime.ToString("dd/MM/yyyy"))
-                                return salidatmp;
+                            WorkDateTime = tmp_datetime;
+                            break;
                         }
-                        else
-                            Processed = true;
+
                     }
-                    if (Processed == false && this.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery )
-                    {
-                        WorkDateTime = WorkDateTime.AddDays(1);
-                        WorkDateTime = WorkDateTime.SetTime(0, 0, 0);
-                    }
-                } 
-                else
-                // Si ha cambiado la semana se avanza el número de semanas indicado en Periodicity
+                    else
+                        if (WorkDateTime != this.CurrentDate)
+                            break;
+                }
+                WorkDateTime = WorkDateTime.AddDays(1);
+                WorkDateTime = WorkDateTime.SetTime(0, 0, 0);
+
+                if (CurrentWeekNumber != GetWeekNumber(WorkDateTime))
                 {
-                    if (Processed == false)
-                    {
-                        WorkDateTime = WorkDateTime.AddDays(7 * (-1));   // Ajusta al lunes de la semana actual
-                        WorkDateTime = WorkDateTime.AddDays(7 * this.Periodicity);  // Avanza las semanas indicadas
-                        CurrentWeekNumber = GetWeekNumber(WorkDateTime);
-                        WeekChanged = true; 
-                    }
+                    WorkDateTime = WorkDateTime.AddDays(7 * (-1));   // Ajusta al lunes de la semana actual
+                    WorkDateTime = WorkDateTime.AddDays(7 * this.Periodicity);  // Avanza las semanas indicadas
+                    CurrentWeekNumber = GetWeekNumber(WorkDateTime);
                 }
             }
 
+            return WorkDateTime;
+        }
+        private DateTime MonthlyRecurrence()
+        {
+            DateTime WorkDateTime;
+            bool Processed = false;
+            bool FirstTime = true;
+            int CurrentMonth;
+            int MonthlyDay;
 
-            salida = WorkDateTime;
-            return salida;
+            WorkDateTime = this.CurrentDate;
+            CurrentMonth = WorkDateTime.Month;
+            MonthlyDay = this.MonthlyDay;
+            switch (this.MonthlyFrecuency)
+            {
+                case MonthlyFrecuencyEnum.FixedDay:
+                    while (Processed == false)
+                    {
+                        if (WorkDateTime.LastDay(WorkDateTime).Day < MonthlyDay)
+                            MonthlyDay = WorkDateTime.LastDay(WorkDateTime).Day;
+                        if (WorkDateTime.Day == MonthlyDay)
+                        {
+                            if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
+                            {
+                                var salidatmp = this.HourlyRecurrence(WorkDateTime, WorkDateTime != this.CurrentDate);
+                                if (salidatmp != DateTime.MinValue)
+                                {
+                                    WorkDateTime = salidatmp;
+                                    break;
+                                }
+                            }
+                            else
+                                if (FirstTime == false)
+                                    break;
+                        }
+                        FirstTime = false;
+                        MonthlyDay = this.MonthlyDay;
+                        WorkDateTime = WorkDateTime.AddDays(1);
+                        if (WorkDateTime.Day < MonthlyDay && WorkDateTime.Month == CurrentMonth ) 
+                            WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, MonthlyDay, WorkDateTime.Hour, WorkDateTime.Minute, WorkDateTime.Second);
+                        else
+                        {
+
+                            if (WorkDateTime.Month != CurrentMonth)
+                                WorkDateTime = WorkDateTime.AddDays(-1);
+
+                            WorkDateTime = new DateTime(this.CurrentDate.Year, this.CurrentDate.Month, 1, 0, 0, 0);
+                            WorkDateTime = WorkDateTime.AddMonths(this.Periodicity);
+                            var LastDayOfMonth = WorkDateTime.LastDay(WorkDateTime);
+                            if (LastDayOfMonth.Day < this.MonthlyDay)
+                            {
+                                WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, LastDayOfMonth.Day);
+                                MonthlyDay = LastDayOfMonth.Day;
+                            }
+                            else
+                                WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, MonthlyDay);
+
+                        }
+                    }
+                    break;
+                case MonthlyFrecuencyEnum.DayPosition:
+                    DateTime datetime_tmp = DateTime.MinValue;
+                    while (true)
+                    {
+                        datetime_tmp = GetDateByDayPosition(this.MonthlyDayPosition, this.WeekDays, WorkDateTime);
+
+                        if (WorkDateTime <= datetime_tmp )
+                        {
+                            WorkDateTime = datetime_tmp;
+                            if (WorkDateTime != this.CurrentDate || this.HourlyFrecuency != HourlyFrecuencysEnum.None)
+                            {
+                                if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
+                                {
+                                    var tmp_datetime = this.HourlyRecurrence(WorkDateTime, WorkDateTime != this.CurrentDate);
+                                    if (tmp_datetime != DateTime.MinValue)
+                                    {
+                                        WorkDateTime = tmp_datetime;
+                                        break;
+                                    }
+
+                                }
+                                else
+                                    break;
+
+                            }
+                        }
+
+/*                        if ((WorkDateTime <= datetime_tmp && WorkDateTime != this.CurrentDate) || this.HourlyFrecuency != HourlyFrecuencysEnum.None)
+                        {
+                            WorkDateTime = datetime_tmp;
+                            if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
+                            {
+                                var tmp_datetime = this.HourlyRecurrence(WorkDateTime, WorkDateTime != this.CurrentDate);
+                                if (tmp_datetime != DateTime.MinValue)
+                                {
+                                    WorkDateTime = tmp_datetime;
+                                    break;
+                                }
+
+                            }
+                            else
+                                break;
+                        }*/
+                        WorkDateTime = new DateTime(CurrentDate.Year,CurrentDate .Month,1,0,0,0);
+                        WorkDateTime = WorkDateTime.AddMonths(this.Periodicity);
+                    }
+                    break;
+            }
+            return WorkDateTime;
+        }
+        private DateTime GetDateByDayPosition(DayPositionEnum search_position, int weekDays,DateTime WorkDateTime)
+        {
+            int Position = 99;
+            DateTime LastDayFound = DateTime.MinValue ;
+            int ActualMonth = WorkDateTime.Month;
+            int Contador = 0;
+
+            if (search_position != DayPositionEnum.Last)
+                Position = (int)search_position + 1;
+
+            WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, 1,WorkDateTime.Hour,WorkDateTime.Minute,WorkDateTime.Second);
+
+            // Procesa todos los días del mes de la fecha recibida
+            while (ActualMonth == WorkDateTime.Month)
+            {
+                // Si el dia actual es lunes comprueba si se esta buscando el lunes, Dia de la semana de trabajo o cualquier dia. Lo mismo para el resto de los dias de la semana (Salvo sabados y domingos)
+                if ((WorkDateTime.DayOfWeek == DayOfWeek.Monday && (weekDays == (int)WeekDaysEnum.Monday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day))||
+                (WorkDateTime.DayOfWeek == DayOfWeek.Tuesday && (weekDays == (int)WeekDaysEnum.Tuesday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day)) ||
+                (WorkDateTime.DayOfWeek == DayOfWeek.Wednesday && (weekDays == (int)WeekDaysEnum.Wednesday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day)) ||
+                (WorkDateTime.DayOfWeek == DayOfWeek.Thursday && (weekDays == (int)WeekDaysEnum.Thursday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day)) ||
+                (WorkDateTime.DayOfWeek == DayOfWeek.Friday && (weekDays == (int)WeekDaysEnum.Friday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day)) ||
+                (WorkDateTime.DayOfWeek == DayOfWeek.Saturday && (weekDays == (int)WeekDaysEnum.Saturday || weekDays == (int)WeekDaysEnum.WeekendDays || weekDays == (int)WeekDaysEnum.Day)) ||
+                (WorkDateTime.DayOfWeek == DayOfWeek.Sunday && (weekDays == (int)WeekDaysEnum.Sunday || weekDays == (int)WeekDaysEnum.WeekendDays || weekDays == (int)WeekDaysEnum.Day)))
+                {
+                    Contador++;
+                    LastDayFound = WorkDateTime;
+                }
+                if (Contador == (int)Position)
+                    break;
+
+                WorkDateTime = WorkDateTime.AddDays(1);
+
+            }
+            if (Position == 99)
+                WorkDateTime = LastDayFound;
+
+            return WorkDateTime;
+
+
         }
         private bool DayOfWeekIncluded(DateTime WorkDateTime)
         {
             bool Result = false;
-            if (WorkDateTime.DayOfWeek == DayOfWeek.Monday && (this.WeekDays & (int)WeekDaysEnum.Monday) != 0)
-            {
-                Result = true;
-            }
-            if (WorkDateTime.DayOfWeek == DayOfWeek.Tuesday && (this.WeekDays & (int)WeekDaysEnum.Tuesday) != 0)
-            {
-                Result = true;
-            }
-            if (WorkDateTime.DayOfWeek == DayOfWeek.Wednesday && (this.WeekDays & (int)WeekDaysEnum.Wednesday) != 0)
-            {
-                Result = true;
-            }
-            if (WorkDateTime.DayOfWeek == DayOfWeek.Thursday && (this.WeekDays & (int)WeekDaysEnum.Thursday) != 0)
-            {
-                Result = true;
-            }
-            if (WorkDateTime.DayOfWeek == DayOfWeek.Friday && (this.WeekDays & (int)WeekDaysEnum.Friday) != 0)
-            {
-                Result = true;
-            }
-            if (WorkDateTime.DayOfWeek == DayOfWeek.Saturday && (this.WeekDays & (int)WeekDaysEnum.Saturday) != 0)
-            {
-                Result = true;
-            }
-            if (WorkDateTime.DayOfWeek == DayOfWeek.Sunday && (this.WeekDays & (int)WeekDaysEnum.Sunday) != 0)
+
+            if ((WorkDateTime.DayOfWeek == DayOfWeek.Monday && (this.WeekDays & (int)WeekDaysEnum.Monday) != 0) ||
+            (WorkDateTime.DayOfWeek == DayOfWeek.Tuesday && (this.WeekDays & (int)WeekDaysEnum.Tuesday) != 0) ||
+            (WorkDateTime.DayOfWeek == DayOfWeek.Wednesday && (this.WeekDays & (int)WeekDaysEnum.Wednesday) != 0) ||
+            (WorkDateTime.DayOfWeek == DayOfWeek.Thursday && (this.WeekDays & (int)WeekDaysEnum.Thursday) != 0) ||
+            (WorkDateTime.DayOfWeek == DayOfWeek.Friday && (this.WeekDays & (int)WeekDaysEnum.Friday) != 0) ||
+            (WorkDateTime.DayOfWeek == DayOfWeek.Saturday && (this.WeekDays & (int)WeekDaysEnum.Saturday) != 0) ||
+            (WorkDateTime.DayOfWeek == DayOfWeek.Sunday && (this.WeekDays & (int)WeekDaysEnum.Sunday) != 0))
             {
                 Result = true;
             }
@@ -272,7 +410,7 @@ namespace Scheduler
                 throw new SchedulerException("Debe indicar la fecha limite de inicio.");
 
             // Se comprueba que la periodicidad no es igual o inferior a 0 cuando es de tipo diario o semanal
-            if ((this.Type == RecurrenceTypesEnum.Daily || this.Type == RecurrenceTypesEnum.Weekly) && this.Periodicity <= 0)
+            if ((this.Type == RecurrenceTypesEnum.Daily || this.Type == RecurrenceTypesEnum.Weekly || this.Type == RecurrenceTypesEnum.Monthly) && this.Periodicity <= 0)
                 throw new SchedulerException("La Periodicidad debe ser superior a 0.");
 
 
@@ -280,24 +418,30 @@ namespace Scheduler
             if (StartDate != DateTime.MinValue && CurrentDate < StartDate)
                 throw new SchedulerException("La fecha de calculo es inferior a la fecha de inicio establecida");
 
-            // Se comprueba que la hora desde no es superior a la hora hasta en modo hourly
-            if (this.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery && this.HourlyStartAt > this.HourlyEndAt)
-                throw new SchedulerException("La hora 'desde' debe ser inferior a la hora 'hasta'.");
-
             // Comprueba que se han indicado algun dia de la semana en la recurrencia semanal
             if (this.Type == RecurrenceTypesEnum.Weekly && this.WeekDays == 0)
                 throw new SchedulerException("Debe indicarse algún día de la semana para la aplicación de la recurrencia semanal.");
 
-            // Si se indica periodicidad horaria se comprueba que se han indicado la hora de limite desde-hasta
-            if (this.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery && this.HourlyStartAt == DateTime.MinValue && this.HourlyEndAt == DateTime.MinValue)
-                throw new SchedulerException("Debe indicarse las horas limite cuando el modo horario es periodico.");
+            if (this.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery)
+            {
+                // Si se indica periodicidad horaria se comprueba que se han indicado la hora de limite desde-hasta
+                if (this.HourlyStartAt == DateTime.MinValue && this.HourlyEndAt == DateTime.MinValue)
+                    throw new SchedulerException("Debe indicarse las horas limite cuando el modo horario es periodico.");
+                // Se comprueba que la hora desde no es superior a la hora hasta en modo hourly
+                if (this.HourlyStartAt >= this.HourlyEndAt)
+                    throw new SchedulerException("La hora 'desde' debe ser inferior a la hora 'hasta'.");
+            }
 
             // Si estamos en modo hourly periodico se comprueba que se envia la periodicidad de horas
             if (this.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery && this.HourlyOccursEvery <= 0)
                 throw new SchedulerException("Debe indicarse un valor para la periodicidad horaria.");
 
-
-
+            // Comprobaciones recurrencia Mensual
+            if (this.Type == RecurrenceTypesEnum.Monthly)
+            {
+                if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay  &&  (this.MonthlyDay <= 0 || this.MonthlyDay > 31))
+                    throw new SchedulerException("El día debe del mes estar comprendido entre 1 y 31.");
+            }
         }
         private int GetWeekNumber(DateTime ActualDate)
         {
@@ -312,45 +456,39 @@ namespace Scheduler
             switch(this.Type)
             {
                 case RecurrenceTypesEnum.Once:
-                    Description = "Occurs One. Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
-                        " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
-
+                    Description = "Occurs One";
                     break;
                 case RecurrenceTypesEnum.Daily:
                     Description = "Occurs every " + this.Periodicity + " day(s)";
-                    switch(this.HourlyFrecuency)
-                    {
-                        case HourlyFrecuencysEnum.OccursOne:
-                            Description += " at " + this.HourlyOccursAt.ToString("HH:mm");
-                            break;
-                        case HourlyFrecuencysEnum.OccursEvery:
-                            Description += ". Every " + this.HourlyOccursEvery   + " hour(s) between " + this.HourlyStartAt.ToString("HH:mm") + " and " + this.HourlyEndAt.ToString("HH:mm");
-                            break;
-                        default:
-                            break;
-                    }
-                    Description += ". Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
-                                 " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
                     break;
                 case RecurrenceTypesEnum.Weekly:
                     Description = "Occurs every " + this.Periodicity + " week(s) on "+StringDays();
-                    switch (this.HourlyFrecuency)
+                    break;
+                case RecurrenceTypesEnum.Monthly:
+                    if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay)
                     {
-                        case HourlyFrecuencysEnum.OccursOne:
-                            Description += " at " + this.HourlyOccursAt.ToString("HH:mm");
-                            break;
-                        case HourlyFrecuencysEnum.OccursEvery:
-                            Description += ". Every " + this.HourlyOccursEvery  + " hour(s) between " + this.HourlyStartAt.ToString("HH:mm") + " and " + this.HourlyEndAt.ToString("HH:mm");
-                            break;
-                        default:
-                            break;
+                        Description = "Occurs on day " + this.MonthlyDay;
+                    } else
+                    {
+                        Description = "Occurs the " + Enum.GetName(typeof(DayPositionEnum), this.MonthlyDayPosition).ToLower() + " " + Enum.GetName(typeof(WeekDaysEnum), (WeekDaysEnum)this.WeekDays).ToLower();
                     }
-                    Description += ". Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
-                                 " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
-
+                    Description += " of every " + this.Periodicity + " month(s)";
                     break;
 
             }
+            switch (this.HourlyFrecuency)
+            {
+                case HourlyFrecuencysEnum.OccursOne:
+                    Description += " at " + this.HourlyOccursAt.ToString("HH:mm");
+                    break;
+                case HourlyFrecuencysEnum.OccursEvery:
+                    Description += ". Every " + this.HourlyOccursEvery + " hour(s) between " + this.HourlyStartAt.ToString("HH:mm") + " and " + this.HourlyEndAt.ToString("HH:mm");
+                    break;
+                default:
+                    break;
+            }
+            Description += ". Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
+                            " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
 
             return Description;
         }
@@ -403,6 +541,24 @@ namespace Scheduler
             return daystext;
         }
 
+        public int NextHourInterval(int Hour)
+        {
+            int x;
+            int NextHour = -1;
+
+            x = this.HourlyStartAt.Hour;
+            while (x <= this.HourlyEndAt.Hour)
+            {
+                if (Hour < x)
+                {
+                    NextHour = x;
+                    break;
+                }
+                x += this.HourlyOccursEvery;
+
+            }
+            return NextHour;
+        }
     }
 }
 

@@ -74,6 +74,18 @@ namespace Scheduler
             this.DailyOccursEveryCB = new DevExpress.XtraEditors.CheckEdit();
             this.DailyOccursAtTB = new DevExpress.XtraEditors.TimeEdit();
             this.DailyOccursAtCB = new DevExpress.XtraEditors.CheckEdit();
+            this.groupControl7 = new DevExpress.XtraEditors.GroupControl();
+            this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl16 = new DevExpress.XtraEditors.LabelControl();
+            this.MonthlyTheEveryMonthsTB = new DevExpress.XtraEditors.SpinEdit();
+            this.MonthlyTheDayCMB = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.MonthlyThePositionCMB = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.MonthlyTheCB = new DevExpress.XtraEditors.CheckEdit();
+            this.labelControl15 = new DevExpress.XtraEditors.LabelControl();
+            this.MonthlyDayEveryMonthsTB = new DevExpress.XtraEditors.SpinEdit();
+            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
+            this.MonthlyDayCB = new DevExpress.XtraEditors.CheckEdit();
+            this.MonthlyDayEveryTB = new DevExpress.XtraEditors.SpinEdit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CurrentDateTB.Properties.CalendarTimeProperties)).BeginInit();
@@ -113,6 +125,15 @@ namespace Scheduler
             ((System.ComponentModel.ISupportInitialize)(this.DailyOccursEveryCB.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DailyOccursAtTB.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DailyOccursAtCB.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl7)).BeginInit();
+            this.groupControl7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyTheEveryMonthsTB.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyTheDayCMB.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyThePositionCMB.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyTheCB.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyDayEveryMonthsTB.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyDayCB.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyDayEveryTB.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // groupControl1
@@ -223,7 +244,8 @@ namespace Scheduler
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.OccursTB.Properties.Items.AddRange(new object[] {
             "Daily",
-            "Weekly"});
+            "Weekly",
+            "Monthly"});
             this.OccursTB.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.OccursTB.Size = new System.Drawing.Size(107, 20);
             this.OccursTB.TabIndex = 5;
@@ -256,7 +278,7 @@ namespace Scheduler
             this.groupControl3.Controls.Add(this.EndDateTB);
             this.groupControl3.Controls.Add(this.labelControl7);
             this.groupControl3.Controls.Add(this.StartDateTB);
-            this.groupControl3.Location = new System.Drawing.Point(12, 491);
+            this.groupControl3.Location = new System.Drawing.Point(12, 570);
             this.groupControl3.Name = "groupControl3";
             this.groupControl3.Size = new System.Drawing.Size(590, 67);
             this.groupControl3.TabIndex = 3;
@@ -308,9 +330,9 @@ namespace Scheduler
             this.groupControl4.Controls.Add(this.labelControl10);
             this.groupControl4.Controls.Add(this.NextExecutionTB);
             this.groupControl4.Controls.Add(this.labelControl9);
-            this.groupControl4.Location = new System.Drawing.Point(12, 575);
+            this.groupControl4.Location = new System.Drawing.Point(12, 659);
             this.groupControl4.Name = "groupControl4";
-            this.groupControl4.Size = new System.Drawing.Size(590, 167);
+            this.groupControl4.Size = new System.Drawing.Size(590, 164);
             this.groupControl4.TabIndex = 4;
             this.groupControl4.Text = "Ouput";
             // 
@@ -359,7 +381,7 @@ namespace Scheduler
             this.groupControl5.Controls.Add(this.labelControl11);
             this.groupControl5.Controls.Add(this.WeekEveryTB);
             this.groupControl5.Controls.Add(this.labelControl12);
-            this.groupControl5.Location = new System.Drawing.Point(12, 228);
+            this.groupControl5.Location = new System.Drawing.Point(12, 347);
             this.groupControl5.Name = "groupControl5";
             this.groupControl5.Size = new System.Drawing.Size(590, 100);
             this.groupControl5.TabIndex = 10;
@@ -472,7 +494,7 @@ namespace Scheduler
             this.groupControl6.Controls.Add(this.DailyOccursEveryCB);
             this.groupControl6.Controls.Add(this.DailyOccursAtTB);
             this.groupControl6.Controls.Add(this.DailyOccursAtCB);
-            this.groupControl6.Location = new System.Drawing.Point(12, 347);
+            this.groupControl6.Location = new System.Drawing.Point(12, 206);
             this.groupControl6.Name = "groupControl6";
             this.groupControl6.Size = new System.Drawing.Size(590, 124);
             this.groupControl6.TabIndex = 17;
@@ -505,7 +527,6 @@ namespace Scheduler
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.DailyEndTB.Size = new System.Drawing.Size(125, 20);
             this.DailyEndTB.TabIndex = 19;
-            this.DailyEndTB.EditValueChanged += new System.EventHandler(this.DailyEndTB_EditValueChanged);
             // 
             // labelControl14
             // 
@@ -525,7 +546,6 @@ namespace Scheduler
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.DailyStartingTB.Size = new System.Drawing.Size(106, 20);
             this.DailyStartingTB.TabIndex = 17;
-            this.DailyStartingTB.EditValueChanged += new System.EventHandler(this.DailyStartingTB_EditValueChanged);
             // 
             // labelControl13
             // 
@@ -550,7 +570,6 @@ namespace Scheduler
             this.DailyOccursEveryCM.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.DailyOccursEveryCM.Size = new System.Drawing.Size(57, 20);
             this.DailyOccursEveryCM.TabIndex = 10;
-            this.DailyOccursEveryCM.SelectedIndexChanged += new System.EventHandler(this.DailyOccursEveryCM_SelectedIndexChanged);
             // 
             // DailyOccursEveryCB
             // 
@@ -576,7 +595,6 @@ namespace Scheduler
             this.DailyOccursAtTB.Properties.UseMaskAsDisplayFormat = true;
             this.DailyOccursAtTB.Size = new System.Drawing.Size(167, 20);
             this.DailyOccursAtTB.TabIndex = 13;
-            this.DailyOccursAtTB.EditValueChanged += new System.EventHandler(this.DailyOccursAtTB_EditValueChanged);
             // 
             // DailyOccursAtCB
             // 
@@ -589,11 +607,188 @@ namespace Scheduler
             this.DailyOccursAtCB.UseWaitCursor = true;
             this.DailyOccursAtCB.CheckedChanged += new System.EventHandler(this.DailyOccursAtCB_CheckedChanged);
             // 
+            // groupControl7
+            // 
+            this.groupControl7.Controls.Add(this.labelControl17);
+            this.groupControl7.Controls.Add(this.labelControl16);
+            this.groupControl7.Controls.Add(this.MonthlyTheEveryMonthsTB);
+            this.groupControl7.Controls.Add(this.MonthlyTheDayCMB);
+            this.groupControl7.Controls.Add(this.MonthlyThePositionCMB);
+            this.groupControl7.Controls.Add(this.MonthlyTheCB);
+            this.groupControl7.Controls.Add(this.labelControl15);
+            this.groupControl7.Controls.Add(this.MonthlyDayEveryMonthsTB);
+            this.groupControl7.Controls.Add(this.labelControl3);
+            this.groupControl7.Controls.Add(this.MonthlyDayCB);
+            this.groupControl7.Controls.Add(this.MonthlyDayEveryTB);
+            this.groupControl7.Location = new System.Drawing.Point(12, 464);
+            this.groupControl7.Name = "groupControl7";
+            this.groupControl7.Size = new System.Drawing.Size(590, 100);
+            this.groupControl7.TabIndex = 17;
+            this.groupControl7.Text = "Monthly Configuration";
+            // 
+            // labelControl17
+            // 
+            this.labelControl17.Location = new System.Drawing.Point(510, 78);
+            this.labelControl17.Name = "labelControl17";
+            this.labelControl17.Size = new System.Drawing.Size(43, 13);
+            this.labelControl17.TabIndex = 31;
+            this.labelControl17.Text = "Month(s)";
+            // 
+            // labelControl16
+            // 
+            this.labelControl16.Location = new System.Drawing.Point(377, 78);
+            this.labelControl16.Name = "labelControl16";
+            this.labelControl16.Size = new System.Drawing.Size(43, 13);
+            this.labelControl16.TabIndex = 30;
+            this.labelControl16.Text = "Of every";
+            // 
+            // MonthlyTheEveryMonthsTB
+            // 
+            this.MonthlyTheEveryMonthsTB.EditValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.MonthlyTheEveryMonthsTB.Enabled = false;
+            this.MonthlyTheEveryMonthsTB.Location = new System.Drawing.Point(432, 75);
+            this.MonthlyTheEveryMonthsTB.Name = "MonthlyTheEveryMonthsTB";
+            this.MonthlyTheEveryMonthsTB.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.MonthlyTheEveryMonthsTB.Properties.IsFloatValue = false;
+            this.MonthlyTheEveryMonthsTB.Properties.MaskSettings.Set("mask", "N00");
+            this.MonthlyTheEveryMonthsTB.Size = new System.Drawing.Size(65, 20);
+            this.MonthlyTheEveryMonthsTB.TabIndex = 29;
+            // 
+            // MonthlyTheDayCMB
+            // 
+            this.MonthlyTheDayCMB.EditValue = "Monday";
+            this.MonthlyTheDayCMB.Enabled = false;
+            this.MonthlyTheDayCMB.Location = new System.Drawing.Point(243, 75);
+            this.MonthlyTheDayCMB.Name = "MonthlyTheDayCMB";
+            this.MonthlyTheDayCMB.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.MonthlyTheDayCMB.Properties.Items.AddRange(new object[] {
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+            "Workdays",
+            "WeekendDays",
+            "EveryDay"});
+            this.MonthlyTheDayCMB.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            this.MonthlyTheDayCMB.Size = new System.Drawing.Size(128, 20);
+            this.MonthlyTheDayCMB.TabIndex = 28;
+            // 
+            // MonthlyThePositionCMB
+            // 
+            this.MonthlyThePositionCMB.EditValue = "First";
+            this.MonthlyThePositionCMB.Enabled = false;
+            this.MonthlyThePositionCMB.Location = new System.Drawing.Point(96, 75);
+            this.MonthlyThePositionCMB.Name = "MonthlyThePositionCMB";
+            this.MonthlyThePositionCMB.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.MonthlyThePositionCMB.Properties.Items.AddRange(new object[] {
+            "First",
+            "Second",
+            "Third",
+            "Fourth",
+            "Last"});
+            this.MonthlyThePositionCMB.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            this.MonthlyThePositionCMB.Size = new System.Drawing.Size(128, 20);
+            this.MonthlyThePositionCMB.TabIndex = 27;
+            // 
+            // MonthlyTheCB
+            // 
+            this.MonthlyTheCB.Location = new System.Drawing.Point(15, 75);
+            this.MonthlyTheCB.Name = "MonthlyTheCB";
+            this.MonthlyTheCB.Properties.Caption = "The";
+            this.MonthlyTheCB.Size = new System.Drawing.Size(64, 20);
+            this.MonthlyTheCB.TabIndex = 26;
+            this.MonthlyTheCB.Tag = "2";
+            this.MonthlyTheCB.UseWaitCursor = true;
+            this.MonthlyTheCB.CheckedChanged += new System.EventHandler(this.MonthlyTheCB_CheckedChanged);
+            // 
+            // labelControl15
+            // 
+            this.labelControl15.Location = new System.Drawing.Point(320, 43);
+            this.labelControl15.Name = "labelControl15";
+            this.labelControl15.Size = new System.Drawing.Size(43, 13);
+            this.labelControl15.TabIndex = 25;
+            this.labelControl15.Text = "Month(s)";
+            // 
+            // MonthlyDayEveryMonthsTB
+            // 
+            this.MonthlyDayEveryMonthsTB.EditValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.MonthlyDayEveryMonthsTB.Enabled = false;
+            this.MonthlyDayEveryMonthsTB.Location = new System.Drawing.Point(243, 40);
+            this.MonthlyDayEveryMonthsTB.Name = "MonthlyDayEveryMonthsTB";
+            this.MonthlyDayEveryMonthsTB.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.MonthlyDayEveryMonthsTB.Properties.IsFloatValue = false;
+            this.MonthlyDayEveryMonthsTB.Properties.MaskSettings.Set("mask", "N00");
+            this.MonthlyDayEveryMonthsTB.Size = new System.Drawing.Size(65, 20);
+            this.MonthlyDayEveryMonthsTB.TabIndex = 24;
+            // 
+            // labelControl3
+            // 
+            this.labelControl3.Location = new System.Drawing.Point(173, 42);
+            this.labelControl3.Name = "labelControl3";
+            this.labelControl3.Size = new System.Drawing.Size(28, 13);
+            this.labelControl3.TabIndex = 23;
+            this.labelControl3.Text = "Every";
+            // 
+            // MonthlyDayCB
+            // 
+            this.MonthlyDayCB.EditValue = true;
+            this.MonthlyDayCB.Location = new System.Drawing.Point(15, 39);
+            this.MonthlyDayCB.Name = "MonthlyDayCB";
+            this.MonthlyDayCB.Properties.Caption = "Day";
+            this.MonthlyDayCB.Size = new System.Drawing.Size(64, 20);
+            this.MonthlyDayCB.TabIndex = 22;
+            this.MonthlyDayCB.Tag = "2";
+            this.MonthlyDayCB.UseWaitCursor = true;
+            this.MonthlyDayCB.CheckedChanged += new System.EventHandler(this.MonthlyDayCB_CheckedChanged);
+            // 
+            // MonthlyDayEveryTB
+            // 
+            this.MonthlyDayEveryTB.EditValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.MonthlyDayEveryTB.Enabled = false;
+            this.MonthlyDayEveryTB.Location = new System.Drawing.Point(96, 39);
+            this.MonthlyDayEveryTB.Name = "MonthlyDayEveryTB";
+            this.MonthlyDayEveryTB.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.MonthlyDayEveryTB.Properties.IsFloatValue = false;
+            this.MonthlyDayEveryTB.Properties.MaskSettings.Set("mask", "N00");
+            this.MonthlyDayEveryTB.Properties.MaxValue = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.MonthlyDayEveryTB.Properties.MinValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.MonthlyDayEveryTB.Size = new System.Drawing.Size(65, 20);
+            this.MonthlyDayEveryTB.TabIndex = 21;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(620, 752);
+            this.ClientSize = new System.Drawing.Size(618, 835);
+            this.Controls.Add(this.groupControl7);
             this.Controls.Add(this.groupControl6);
             this.Controls.Add(this.groupControl5);
             this.Controls.Add(this.groupControl4);
@@ -648,6 +843,16 @@ namespace Scheduler
             ((System.ComponentModel.ISupportInitialize)(this.DailyOccursEveryCB.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DailyOccursAtTB.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DailyOccursAtCB.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl7)).EndInit();
+            this.groupControl7.ResumeLayout(false);
+            this.groupControl7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyTheEveryMonthsTB.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyTheDayCMB.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyThePositionCMB.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyTheCB.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyDayEveryMonthsTB.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyDayCB.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MonthlyDayEveryTB.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -698,6 +903,18 @@ namespace Scheduler
         private DevExpress.XtraEditors.TimeEdit DailyOccursAtTB;
         private DevExpress.XtraEditors.CheckEdit DailyOccursAtCB;
         private DevExpress.XtraEditors.SpinEdit DailyOccursEveryTB;
+        private DevExpress.XtraEditors.GroupControl groupControl7;
+        private DevExpress.XtraEditors.LabelControl labelControl17;
+        private DevExpress.XtraEditors.LabelControl labelControl16;
+        private DevExpress.XtraEditors.SpinEdit MonthlyTheEveryMonthsTB;
+        private DevExpress.XtraEditors.ComboBoxEdit MonthlyTheDayCMB;
+        private DevExpress.XtraEditors.ComboBoxEdit MonthlyThePositionCMB;
+        private DevExpress.XtraEditors.CheckEdit MonthlyTheCB;
+        private DevExpress.XtraEditors.LabelControl labelControl15;
+        private DevExpress.XtraEditors.SpinEdit MonthlyDayEveryMonthsTB;
+        private DevExpress.XtraEditors.LabelControl labelControl3;
+        private DevExpress.XtraEditors.CheckEdit MonthlyDayCB;
+        private DevExpress.XtraEditors.SpinEdit MonthlyDayEveryTB;
     }
 }
 

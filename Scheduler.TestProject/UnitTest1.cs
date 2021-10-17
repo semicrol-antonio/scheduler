@@ -194,13 +194,21 @@ namespace Scheduler.TestProject
             sm.StartDate = new DateTime(2020, 1, 1, 0, 0, 0);
             sm.Periodicity = 2;
             sm.HourlyFrecuency = HourlyFrecuencysEnum.OccursOne;
-            sm.HourlyOccursAt = new DateTime(2000, 1, 1, 12, 13, 14);
+            sm.HourlyOccursAt = new DateTime(1001, 1, 1, 12, 13, 14);
 
             sm.CurrentDate = new DateTime(2020, 1, 1, 0, 0, 0);
             var data = sm.NextOcurrence();
-            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 3, 12, 13, 14));
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 1, 12, 13, 14));
+            Assert.Equal(data.Description, "Occurs every 2 day(s) at 12:13. Schedule will be used on 01/01/2020 at 12:13 starting on 01/01/2020");
 
+
+            sm.CurrentDate = new DateTime(2020, 1, 1, 13, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 3, 12, 13, 14));
             Assert.Equal(data.Description, "Occurs every 2 day(s) at 12:13. Schedule will be used on 03/01/2020 at 12:13 starting on 01/01/2020");
+
+
+
         }
         [Fact]
         public void TypeDaily_HourlyEvery()
@@ -255,7 +263,7 @@ namespace Scheduler.TestProject
 
         }
         [Fact]
-        public void TypeDaily_WeeklyNoHourly()
+        public void TypeWeekly_NoHourly()
         {
             SchedulerManager sm = new SchedulerManager();
             sm.Type = RecurrenceTypesEnum.Weekly;
@@ -293,7 +301,7 @@ namespace Scheduler.TestProject
         }
 
         [Fact]
-        public void TypeDaily_WeeklyHourlyFixed()
+        public void TypeWeekly_HourlyFixed()
         {
             SchedulerManager sm = new SchedulerManager();
             sm.Type = RecurrenceTypesEnum.Weekly;
@@ -309,28 +317,28 @@ namespace Scheduler.TestProject
             Assert.Equal(data.Description, "Occurs every 2 week(s) on Monday, Thursday, Friday at 12:13. Schedule will be used on 02/01/2020 at 12:13 starting on 01/01/2020");
             
 
-            sm.CurrentDate = new DateTime(2020, 1, 2, 0, 0, 0);
+            sm.CurrentDate = new DateTime(2020, 1, 2, 12, 13, 14);
             data = sm.NextOcurrence();
             Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 3, 12, 13, 14));
             Assert.Equal(data.Description, "Occurs every 2 week(s) on Monday, Thursday, Friday at 12:13. Schedule will be used on 03/01/2020 at 12:13 starting on 01/01/2020");
 
-            sm.CurrentDate = new DateTime(2020, 1, 3, 0, 0, 0);
+            sm.CurrentDate = new DateTime(2020, 1, 3, 12, 13, 14);
             data = sm.NextOcurrence();
             Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 13, 12, 13, 14));
             Assert.Equal(data.Description, "Occurs every 2 week(s) on Monday, Thursday, Friday at 12:13. Schedule will be used on 13/01/2020 at 12:13 starting on 01/01/2020");
 
-            sm.CurrentDate = new DateTime(2020, 1, 13, 0, 0, 0);
+            sm.CurrentDate = new DateTime(2020, 1, 13, 12, 13, 14);
             data = sm.NextOcurrence();
             Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 16, 12, 13, 14));
             Assert.Equal(data.Description, "Occurs every 2 week(s) on Monday, Thursday, Friday at 12:13. Schedule will be used on 16/01/2020 at 12:13 starting on 01/01/2020");
 
-            sm.CurrentDate = new DateTime(2020, 1, 16, 0, 0, 0);
+            sm.CurrentDate = new DateTime(2020, 1, 16, 12, 13, 14);
             data = sm.NextOcurrence();
             Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 17, 12, 13, 14));
             Assert.Equal(data.Description, "Occurs every 2 week(s) on Monday, Thursday, Friday at 12:13. Schedule will be used on 17/01/2020 at 12:13 starting on 01/01/2020");
         }
         [Fact]
-        public void TypeDaily_WeeklyHourlyEvery()
+        public void TypeWeekly_HourlyEvery()
         {
             SchedulerManager sm = new SchedulerManager();
             sm.Type = RecurrenceTypesEnum.Weekly;
@@ -424,7 +432,7 @@ namespace Scheduler.TestProject
 
         }
         [Fact]
-        public void TypeDaily_WeeklyNoHourlyAllWeekDays()
+        public void TypeWeekly_NoHourlyAllWeekDays()
         {
             SchedulerManager sm = new SchedulerManager();
             sm.Type = RecurrenceTypesEnum.Weekly;
@@ -532,6 +540,379 @@ namespace Scheduler.TestProject
 
 
         }
+        [Fact]
+        public void TypeMonthly_NoHourly_FixedDay()
+        {
+            SchedulerManager sm = new SchedulerManager();
+            sm.Type = RecurrenceTypesEnum.Monthly;
+            sm.MonthlyFrecuency = MonthlyFrecuencyEnum.FixedDay;
+            sm.StartDate = new DateTime(2020, 1, 1, 0, 0, 0);
+            sm.CurrentDate = new DateTime(2020, 1, 1, 0, 0, 0);
+            sm.MonthlyDay = 31;
+            sm.Periodicity = 2;
+
+            var data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 31, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Schedule will be used on 31/01/2020 at 00:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 1, 31, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 3,31, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Schedule will be used on 31/03/2020 at 00:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 3, 31, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 5, 31, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Schedule will be used on 31/05/2020 at 00:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 10, 31, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Schedule will be used on 31/10/2020 at 00:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 10, 31, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 12, 31, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Schedule will be used on 31/12/2020 at 00:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 12, 31, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 2, 28, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Schedule will be used on 28/02/2021 at 00:00 starting on 01/01/2020");
+
+
+
+        }
+        [Fact]
+        public void TypeMonthly_NoHourly_DayPosition()
+        {
+            SchedulerManager sm = new SchedulerManager();
+            sm.Type = RecurrenceTypesEnum.Monthly;
+            sm.MonthlyFrecuency = MonthlyFrecuencyEnum.DayPosition;
+            sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
+            sm.Periodicity = 2;
+
+
+            // FIRST MONDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.First;
+            sm.WeekDays = (int)WeekDaysEnum.Monday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            var data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12 ,6, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first monday of every 2 month(s). Schedule will be used on 06/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 6, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 7, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first monday of every 2 month(s). Schedule will be used on 07/02/2022 at 00:00 starting on 01/01/2021");
+
+            // SECOND MONDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Second;
+            sm.WeekDays = (int)WeekDaysEnum.Monday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 13, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the second monday of every 2 month(s). Schedule will be used on 13/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 13, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 14, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the second monday of every 2 month(s). Schedule will be used on 14/02/2022 at 00:00 starting on 01/01/2021");
+
+            // THIRD MONDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Third;
+            sm.WeekDays = (int)WeekDaysEnum.Monday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 10, 18, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the third monday of every 2 month(s). Schedule will be used on 18/10/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 10, 18, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 20, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the third monday of every 2 month(s). Schedule will be used on 20/12/2021 at 00:00 starting on 01/01/2021");
+
+            // FOURTH MONDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Fourth;
+            sm.WeekDays = (int)WeekDaysEnum.Monday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 10, 25, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the fourth monday of every 2 month(s). Schedule will be used on 25/10/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 10, 25, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 27, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the fourth monday of every 2 month(s). Schedule will be used on 27/12/2021 at 00:00 starting on 01/01/2021");
+
+            // LAST MONDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Last;
+            sm.WeekDays = (int)WeekDaysEnum.Monday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 10, 25, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last monday of every 2 month(s). Schedule will be used on 25/10/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 10, 25, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 27, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last monday of every 2 month(s). Schedule will be used on 27/12/2021 at 00:00 starting on 01/01/2021");
+
+
+            // FIRST SATURDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.First;
+            sm.WeekDays = (int)WeekDaysEnum.Saturday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 4, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first saturday of every 2 month(s). Schedule will be used on 04/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 4, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 5, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first saturday of every 2 month(s). Schedule will be used on 05/02/2022 at 00:00 starting on 01/01/2021");
+
+            // SECOND SATURDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Second;
+            sm.WeekDays = (int)WeekDaysEnum.Saturday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 11, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the second saturday of every 2 month(s). Schedule will be used on 11/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 11, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 12, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the second saturday of every 2 month(s). Schedule will be used on 12/02/2022 at 00:00 starting on 01/01/2021");
+
+            // THIRD SATURDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Third;
+            sm.WeekDays = (int)WeekDaysEnum.Saturday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 18, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the third saturday of every 2 month(s). Schedule will be used on 18/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 18, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 19, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the third saturday of every 2 month(s). Schedule will be used on 19/02/2022 at 00:00 starting on 01/01/2021");
+
+            // FOURTH SATURDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Fourth;
+            sm.WeekDays = (int)WeekDaysEnum.Saturday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 10, 23, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the fourth saturday of every 2 month(s). Schedule will be used on 23/10/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 10, 23, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 25, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the fourth saturday of every 2 month(s). Schedule will be used on 25/12/2021 at 00:00 starting on 01/01/2021");
+
+            // LAST SATURDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Last;
+            sm.WeekDays = (int)WeekDaysEnum.Saturday;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 10, 30, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last saturday of every 2 month(s). Schedule will be used on 30/10/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 10, 30, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 25, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last saturday of every 2 month(s). Schedule will be used on 25/12/2021 at 00:00 starting on 01/01/2021");
+
+            // FIRST WEEKENDDAYS EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.First;
+            sm.WeekDays = (int)WeekDaysEnum.WeekendDays;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 4, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first weekenddays of every 2 month(s). Schedule will be used on 04/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 4, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 5, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first weekenddays of every 2 month(s). Schedule will be used on 05/02/2022 at 00:00 starting on 01/01/2021");
+
+            // SECOND WEEKENDDAYS EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Second;
+            sm.WeekDays = (int)WeekDaysEnum.WeekendDays;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 5, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the second weekenddays of every 2 month(s). Schedule will be used on 05/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 5, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 6, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the second weekenddays of every 2 month(s). Schedule will be used on 06/02/2022 at 00:00 starting on 01/01/2021");
+
+            // THIRD WEEKENDDAYS EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Third;
+            sm.WeekDays = (int)WeekDaysEnum.WeekendDays;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 11, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the third weekenddays of every 2 month(s). Schedule will be used on 11/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 11, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 12, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the third weekenddays of every 2 month(s). Schedule will be used on 12/02/2022 at 00:00 starting on 01/01/2021");
+
+            // FOURTH WEEKENDDAYS EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Fourth;
+            sm.WeekDays = (int)WeekDaysEnum.WeekendDays;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 12, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the fourth weekenddays of every 2 month(s). Schedule will be used on 12/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 12, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 13, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the fourth weekenddays of every 2 month(s). Schedule will be used on 13/02/2022 at 00:00 starting on 01/01/2021");
+
+            // LAST WEEKENDDAYS EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Last;
+            sm.WeekDays = (int)WeekDaysEnum.WeekendDays;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 10, 31, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last weekenddays of every 2 month(s). Schedule will be used on 31/10/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 10, 31, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 26, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last weekenddays of every 2 month(s). Schedule will be used on 26/12/2021 at 00:00 starting on 01/01/2021");
+
+
+            // TODOS LOS DIAS DEL MES
+            // FIRST DAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.First;
+            sm.WeekDays = (int)WeekDaysEnum.Day;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 1, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first day of every 2 month(s). Schedule will be used on 01/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 1, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 1, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first day of every 2 month(s). Schedule will be used on 01/02/2022 at 00:00 starting on 01/01/2021");
+
+            // LAST DAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Last;
+            sm.WeekDays = (int)WeekDaysEnum.Day;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 10, 31, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last day of every 2 month(s). Schedule will be used on 31/10/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 10, 31, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 31, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last day of every 2 month(s). Schedule will be used on 31/12/2021 at 00:00 starting on 01/01/2021");
+
+            // DIAS DE LA SEMANA LABORAL
+            // FIRST WEEKDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.First;
+            sm.WeekDays = (int)WeekDaysEnum.WeekDays;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 1, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first weekdays of every 2 month(s). Schedule will be used on 01/12/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 12, 1, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2022, 2, 1, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the first weekdays of every 2 month(s). Schedule will be used on 01/02/2022 at 00:00 starting on 01/01/2021");
+
+            // LAST WEEKDAY EVERY 2 MONTHS
+            sm.MonthlyDayPosition = DayPositionEnum.Last;
+            sm.WeekDays = (int)WeekDaysEnum.WeekDays;
+            sm.CurrentDate = new DateTime(2021, 10, 17, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 10,29, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last weekdays of every 2 month(s). Schedule will be used on 29/10/2021 at 00:00 starting on 01/01/2021");
+
+            sm.CurrentDate = new DateTime(2021, 10, 29, 0, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2021, 12, 31, 0, 0, 0));
+            Assert.Equal(data.Description, "Occurs the last weekdays of every 2 month(s). Schedule will be used on 31/12/2021 at 00:00 starting on 01/01/2021");
+
+
+        }
+        [Fact]
+        public void TypeMonthly_Hourly_FixedDay()
+        {
+            SchedulerManager sm = new SchedulerManager();
+            sm.Type = RecurrenceTypesEnum.Monthly;
+            sm.MonthlyFrecuency = MonthlyFrecuencyEnum.FixedDay;
+            sm.StartDate = new DateTime(2020, 1, 1, 0, 0, 0);
+            sm.MonthlyDay = 31;
+            sm.Periodicity = 2;
+            sm.HourlyFrecuency = HourlyFrecuencysEnum.OccursEvery;
+            sm.HourlyStartAt = new DateTime(1001, 1, 1, 4, 0, 0);
+            sm.HourlyEndAt = new DateTime(1001, 1, 1, 8, 0, 0);
+            sm.HourlyOccursEvery = 2;
+
+            sm.CurrentDate = new DateTime(2020, 1, 1, 0, 0, 0);
+            var data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 31, 4, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/01/2020 at 04:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 1,31, 4, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 31, 6, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/01/2020 at 06:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 1, 31, 6, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 31, 8, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/01/2020 at 08:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 1, 31, 8, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 3, 31, 4, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/03/2020 at 04:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 3, 31, 4, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 3, 31, 6, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/03/2020 at 06:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 3, 31, 6, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 3, 31, 8, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/03/2020 at 08:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 3, 31, 8, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 5, 31, 4, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/05/2020 at 04:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 5, 31, 4, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 5, 31, 6, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/05/2020 at 06:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 5, 31, 6, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 5, 31, 8, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/05/2020 at 08:00 starting on 01/01/2020");
+
+            sm.CurrentDate = new DateTime(2020, 5, 31, 8, 0, 0);
+            data = sm.NextOcurrence();
+            Assert.Equal(data.OcurrenceDate, new DateTime(2020, 7, 31, 4, 0, 0));
+            Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/07/2020 at 04:00 starting on 01/01/2020");
+
+        }
+
 
     }
+
 }

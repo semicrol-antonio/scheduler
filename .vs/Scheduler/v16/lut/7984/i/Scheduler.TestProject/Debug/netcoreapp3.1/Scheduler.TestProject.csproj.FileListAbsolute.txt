@@ -14,4 +14,3 @@ C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\0\i\Scheduler.Test
 C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\0\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.csproj.CopyComplete
 C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\0\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.dll
 C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\0\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.genruntimeconfig.cache
-C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\0\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.csproj.AssemblyReference.cache

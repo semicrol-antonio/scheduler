@@ -51,4 +51,8 @@ public static partial class Extensions
     {
         return new DateTime(current.Year, current.Month, current.Day, hour, minute, second, millisecond);
     }
+    public static DateTime LastDay(this DateTime current,DateTime Fecha)
+    {
+        return new DateTime(Fecha.Year, Fecha.Month, 1).AddMonths(1).AddDays(-1);
+    }
 }

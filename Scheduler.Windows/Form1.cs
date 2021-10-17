@@ -133,6 +133,86 @@ namespace Scheduler
                             return;
                         }
                         break;
+                    case 2:  // Monthly Ocurrence
+                        try
+                        {
+                            Gestor.Type = RecurrenceTypesEnum.Monthly;
+                            if (this.MonthlyDayCB.Checked == true)
+                            {
+                                Gestor.MonthlyFrecuency = MonthlyFrecuencyEnum.FixedDay;
+                                Gestor.MonthlyDay = (int)this.MonthlyDayEveryTB.Value;
+                                Gestor.Periodicity = (int)this.MonthlyDayEveryMonthsTB.Value;
+                            }
+                            else
+                            {
+                                Gestor.MonthlyFrecuency = MonthlyFrecuencyEnum.DayPosition;
+                                Gestor.MonthlyDayPosition = (DayPositionEnum)this.MonthlyThePositionCMB.SelectedIndex;
+                                switch((int)this.MonthlyTheDayCMB.SelectedIndex)
+                                {
+                                    case 0:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.Monday;
+                                        break;
+                                    case 1:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.Tuesday;
+                                        break;
+                                    case 2:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.Wednesday ;
+                                        break;
+                                    case 3:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.Thursday;
+                                        break;
+                                    case 4:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.Friday ;
+                                        break;
+                                    case 5:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.Saturday;
+                                        break;
+                                    case 6:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.Sunday ;
+                                        break;
+                                    case 7:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.WeekDays;
+                                        break;
+                                    case 8:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.WeekendDays ;
+                                        break;
+                                    case 9:
+                                        Gestor.WeekDays = (int)WeekDaysEnum.Day;
+                                        break;
+                                }
+
+
+                                Gestor.Periodicity = (int)this.MonthlyTheEveryMonthsTB.Value;
+                            }
+                            Gestor.StartDate = StartDateTB.DateTime;
+                            Gestor.EndDate = EndDateTB.DateTime;
+                            Gestor.CurrentDate = CurrentDateTB.DateTime;
+                            // Datos Frecuencia horaria
+                            if (DailyOccursAtCB.Checked == true)
+                            {
+                                Gestor.HourlyFrecuency = HourlyFrecuencysEnum.OccursOne;
+                                Gestor.HourlyOccursAt = DailyOccursAtTB.Time;
+                            }
+                            if (DailyOccursEveryCB.Checked == true)
+                            {
+                                Gestor.HourlyFrecuency = HourlyFrecuencysEnum.OccursEvery;
+                                Gestor.HourlyOccursEvery = (int)DailyOccursEveryTB.Value;
+                                Gestor.HourlyStartAt = DailyStartingTB.Time;
+                                Gestor.HourlyEndAt = this.DailyEndTB.Time;
+                            }
+
+                            current = Gestor.NextOcurrence();
+
+                            NextExecutionTB.Text = current.NextExecutionTime;
+                            DescriptionTB.Text = current.Description;
+                            CurrentDateTB.DateTime = current.OcurrenceDate;
+                        }
+                        catch (SchedulerException ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                            return;
+                        }
+                        break;
                 }
             }
         }
@@ -142,15 +222,7 @@ namespace Scheduler
             CurrentDateTB.DateTime = DateTime.Today;
         }
 
-        private void DailyEndTB_EditValueChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void DailyOccursAtTB_EditValueChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void DailyOccursAtCB_CheckedChanged(object sender, EventArgs e)
         {
@@ -189,20 +261,39 @@ namespace Scheduler
             }
         }
 
-        private void DailyOccursEveryCM_SelectedIndexChanged(object sender, EventArgs e)
+        private void MonthlyDayCB_CheckedChanged(object sender, EventArgs e)
         {
+            if (MonthlyDayCB.Checked == true)
+            {
+                MonthlyDayEveryTB.Enabled = true;
+                MonthlyDayEveryMonthsTB.Enabled = true;
 
+                MonthlyTheCB.Checked = false;
+            }
+            else
+            {
+                MonthlyDayEveryTB.Enabled = false;
+                MonthlyDayEveryMonthsTB.Enabled = false;
+            }
         }
 
-        private void DailyStartingTB_EditValueChanged(object sender, EventArgs e)
+        private void MonthlyTheCB_CheckedChanged(object sender, EventArgs e)
         {
+            if (MonthlyTheCB.Checked == true)
+            {
 
-        }
+                MonthlyTheDayCMB.Enabled = true;
+                MonthlyThePositionCMB.Enabled = true;
+                MonthlyTheEveryMonthsTB.Enabled = true;
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-
+                MonthlyDayCB.Checked = false;
+            }
+            else
+            {
+                MonthlyTheDayCMB.Enabled = false;
+                MonthlyThePositionCMB.Enabled = false;
+                MonthlyTheEveryMonthsTB.Enabled = false;
+            }
         }
     }
 }
