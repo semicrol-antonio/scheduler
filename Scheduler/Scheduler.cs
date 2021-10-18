@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scheduler
 
@@ -32,7 +28,7 @@ namespace Scheduler
         Saturday = 64,
         WeekDays = Monday | Tuesday | Wednesday | Thursday | Friday,
         WeekendDays = Saturday | Sunday,
-        Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
+        Day = WeekDays | WeekendDays
     }
     public enum HourlyFrecuencysEnum
     {
@@ -199,7 +195,6 @@ namespace Scheduler
             DateTime WorkDateTime;
             bool Processed = false;
             int CurrentWeekNumber;
-            DateTime salidatmp;
 
 
             WorkDateTime = this.CurrentDate;
@@ -276,8 +271,8 @@ namespace Scheduler
                         else
                         {
 
-                            if (WorkDateTime.Month != CurrentMonth)
-                                WorkDateTime = WorkDateTime.AddDays(-1);
+                 /*           if (WorkDateTime.Month != CurrentMonth)
+                                WorkDateTime = WorkDateTime.AddDays(-1);*/
 
                             WorkDateTime = new DateTime(this.CurrentDate.Year, this.CurrentDate.Month, 1, 0, 0, 0);
                             WorkDateTime = WorkDateTime.AddMonths(this.Periodicity);
@@ -289,7 +284,6 @@ namespace Scheduler
                             }
                             else
                                 WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, MonthlyDay);
-
                         }
                     }
                     break;
@@ -299,7 +293,7 @@ namespace Scheduler
                     {
                         datetime_tmp = GetDateByDayPosition(this.MonthlyDayPosition, this.WeekDays, WorkDateTime);
 
-                        if (WorkDateTime <= datetime_tmp )
+                        if (WorkDateTime <= datetime_tmp)
                         {
                             WorkDateTime = datetime_tmp;
                             if (WorkDateTime != this.CurrentDate || this.HourlyFrecuency != HourlyFrecuencysEnum.None)
@@ -319,24 +313,7 @@ namespace Scheduler
 
                             }
                         }
-
-/*                        if ((WorkDateTime <= datetime_tmp && WorkDateTime != this.CurrentDate) || this.HourlyFrecuency != HourlyFrecuencysEnum.None)
-                        {
-                            WorkDateTime = datetime_tmp;
-                            if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
-                            {
-                                var tmp_datetime = this.HourlyRecurrence(WorkDateTime, WorkDateTime != this.CurrentDate);
-                                if (tmp_datetime != DateTime.MinValue)
-                                {
-                                    WorkDateTime = tmp_datetime;
-                                    break;
-                                }
-
-                            }
-                            else
-                                break;
-                        }*/
-                        WorkDateTime = new DateTime(CurrentDate.Year,CurrentDate .Month,1,0,0,0);
+                        WorkDateTime = new DateTime(CurrentDate.Year, CurrentDate.Month, 1, 0, 0, 0);
                         WorkDateTime = WorkDateTime.AddMonths(this.Periodicity);
                     }
                     break;
@@ -380,7 +357,6 @@ namespace Scheduler
                 WorkDateTime = LastDayFound;
 
             return WorkDateTime;
-
 
         }
         private bool DayOfWeekIncluded(DateTime WorkDateTime)
