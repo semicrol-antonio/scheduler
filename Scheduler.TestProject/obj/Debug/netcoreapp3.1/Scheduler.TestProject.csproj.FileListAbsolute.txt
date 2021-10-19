@@ -9,6 +9,7 @@ C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcorea
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Scheduler.TestProject.runtimeconfig.dev.json
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Scheduler.TestProject.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Scheduler.TestProject.pdb
+C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\FluentAssertions.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.CodeCoverage.Shim.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Microsoft.TestPlatform.CoreUtilities.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
@@ -18,6 +19,8 @@ C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcorea
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.Common.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
+C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\xunit.abstractions.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\xunit.assert.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\xunit.core.dll
@@ -87,6 +90,7 @@ C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcorea
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.TestPlatform.CommunicationUtilities.resources.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Scheduler.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\Scheduler.pdb
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\obj\Debug\netcoreapp3.1\Scheduler.TestProject.csproj.AssemblyReference.cache
@@ -98,7 +102,3 @@ C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\obj\Debug\netcorea
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\obj\Debug\netcoreapp3.1\Scheduler.TestProject.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\obj\Debug\netcoreapp3.1\Scheduler.TestProject.pdb
 C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\obj\Debug\netcoreapp3.1\Scheduler.TestProject.genruntimeconfig.cache
-C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\FluentAssertions.dll
-C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
-C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
-C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll

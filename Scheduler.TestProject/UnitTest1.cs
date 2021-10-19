@@ -551,12 +551,12 @@ namespace Scheduler.TestProject
             sm.Periodicity = 2;
 
             // COMPRUEBA QUE SE LANZA LA EXCEPCION DE DIA INCORRECTO
-            sm.MonthlyDay = 32;
+            sm.MonthlyFixedDay = 32;
             Exception ex = Assert.Throws<SchedulerException>(() => sm.NextOcurrence());
             Assert.Equal("El día debe del mes estar comprendido entre 1 y 31.", ex.Message);
 
 
-            sm.MonthlyDay = 31;
+            sm.MonthlyFixedDay = 31;
             var data = sm.NextOcurrence();
             Assert.Equal(data.OcurrenceDate, new DateTime(2020, 1, 31, 0, 0, 0));
             Assert.Equal(data.Description, "Occurs on day 31 of every 2 month(s). Schedule will be used on 31/01/2020 at 00:00 starting on 01/01/2020");
@@ -859,7 +859,7 @@ namespace Scheduler.TestProject
             sm.Type = RecurrenceTypesEnum.Monthly;
             sm.MonthlyFrecuency = MonthlyFrecuencyEnum.FixedDay;
             sm.StartDate = new DateTime(2020, 1, 1, 0, 0, 0);
-            sm.MonthlyDay = 31;
+            sm.MonthlyFixedDay = 31;
             sm.Periodicity = 2;
             sm.HourlyFrecuency = HourlyFrecuencysEnum.OccursEvery;
             sm.HourlyStartAt = new DateTime(1001, 1, 1, 4, 0, 0);

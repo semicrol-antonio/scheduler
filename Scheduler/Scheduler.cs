@@ -80,7 +80,7 @@ namespace Scheduler
         public DateTime HourlyEndAt;
         // Monthly Frecuency;
         public MonthlyFrecuencyEnum MonthlyFrecuency;
-        public int MonthlyDay;
+        public int MonthlyFixedDay;
         public DayPositionEnum MonthlyDayPosition;
 
 
@@ -233,91 +233,59 @@ namespace Scheduler
         private DateTime MonthlyRecurrence()
         {
             DateTime WorkDateTime;
-            bool Processed = false;
-            bool FirstTime = true;
-            int CurrentMonth;
-            int MonthlyDay;
+            DateTime datetime_tmp;
 
             WorkDateTime = this.CurrentDate;
-            CurrentMonth = WorkDateTime.Month;
-            MonthlyDay = this.MonthlyDay;
-            switch (this.MonthlyFrecuency)
+
+            datetime_tmp = DateTime.MinValue;
+            while (true)
             {
-                case MonthlyFrecuencyEnum.FixedDay:
-                    while (Processed == false)
+                if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay)
+                    datetime_tmp = GetDateByDayFixed(this.MonthlyFixedDay , WorkDateTime);
+                else
+                    datetime_tmp = GetDateByDayPosition(this.MonthlyDayPosition, this.WeekDays, WorkDateTime);
+                if (WorkDateTime <= datetime_tmp)
+                {
+                    WorkDateTime = datetime_tmp;
+                    if (WorkDateTime != this.CurrentDate || this.HourlyFrecuency != HourlyFrecuencysEnum.None)
                     {
-                        if (WorkDateTime.LastDay(WorkDateTime).Day < MonthlyDay)
-                            MonthlyDay = WorkDateTime.LastDay(WorkDateTime).Day;
-                        if (WorkDateTime.Day == MonthlyDay)
+                        if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
                         {
-                            if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
+                            var tmp_datetime = this.HourlyRecurrence(WorkDateTime, WorkDateTime != this.CurrentDate);
+                            if (tmp_datetime != DateTime.MinValue)
                             {
-                                var salidatmp = this.HourlyRecurrence(WorkDateTime, WorkDateTime != this.CurrentDate);
-                                if (salidatmp != DateTime.MinValue)
-                                {
-                                    WorkDateTime = salidatmp;
-                                    break;
-                                }
+                                WorkDateTime = tmp_datetime;
+                                break;
                             }
-                            else
-                                if (FirstTime == false)
-                                    break;
+
                         }
-                        FirstTime = false;
-                        MonthlyDay = this.MonthlyDay;
-                        WorkDateTime = WorkDateTime.AddDays(1);
-                        if (WorkDateTime.Day < MonthlyDay && WorkDateTime.Month == CurrentMonth ) 
-                            WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, MonthlyDay, WorkDateTime.Hour, WorkDateTime.Minute, WorkDateTime.Second);
                         else
-                        {
+                            break;
 
-                 /*           if (WorkDateTime.Month != CurrentMonth)
-                                WorkDateTime = WorkDateTime.AddDays(-1);*/
-
-                            WorkDateTime = new DateTime(this.CurrentDate.Year, this.CurrentDate.Month, 1, 0, 0, 0);
-                            WorkDateTime = WorkDateTime.AddMonths(this.Periodicity);
-                            var LastDayOfMonth = WorkDateTime.LastDay(WorkDateTime);
-                            if (LastDayOfMonth.Day < this.MonthlyDay)
-                            {
-                                WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, LastDayOfMonth.Day);
-                                MonthlyDay = LastDayOfMonth.Day;
-                            }
-                            else
-                                WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, MonthlyDay);
-                        }
                     }
-                    break;
-                case MonthlyFrecuencyEnum.DayPosition:
-                    DateTime datetime_tmp = DateTime.MinValue;
-                    while (true)
-                    {
-                        datetime_tmp = GetDateByDayPosition(this.MonthlyDayPosition, this.WeekDays, WorkDateTime);
-
-                        if (WorkDateTime <= datetime_tmp)
-                        {
-                            WorkDateTime = datetime_tmp;
-                            if (WorkDateTime != this.CurrentDate || this.HourlyFrecuency != HourlyFrecuencysEnum.None)
-                            {
-                                if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
-                                {
-                                    var tmp_datetime = this.HourlyRecurrence(WorkDateTime, WorkDateTime != this.CurrentDate);
-                                    if (tmp_datetime != DateTime.MinValue)
-                                    {
-                                        WorkDateTime = tmp_datetime;
-                                        break;
-                                    }
-
-                                }
-                                else
-                                    break;
-
-                            }
-                        }
-                        WorkDateTime = new DateTime(CurrentDate.Year, CurrentDate.Month, 1, 0, 0, 0);
-                        WorkDateTime = WorkDateTime.AddMonths(this.Periodicity);
-                    }
-                    break;
+                }
+                WorkDateTime = new DateTime(CurrentDate.Year, CurrentDate.Month, 1, 0, 0, 0);
+                WorkDateTime = WorkDateTime.AddMonths(this.Periodicity);
             }
+            
+            return WorkDateTime;
+        }
+        private DateTime GetDateByDayFixed(int FixedDay,DateTime BeginDate)
+        {
+            DateTime WorkDateTime;
+            int day_tmp;
+            if (FixedDay != BeginDate.Day)
+            {
+                if (FixedDay > BeginDate.LastDay(BeginDate).Day)
+                    day_tmp = BeginDate.LastDay(BeginDate).Day;
+                else
+                    day_tmp = FixedDay;
+
+                WorkDateTime = new DateTime(BeginDate.Year, BeginDate.Month, day_tmp, BeginDate.Hour, BeginDate.Minute, BeginDate.Second);
+            }
+            else
+                WorkDateTime = BeginDate;
+
             return WorkDateTime;
         }
         private DateTime GetDateByDayPosition(DayPositionEnum search_position, int weekDays,DateTime WorkDateTime)
@@ -357,7 +325,6 @@ namespace Scheduler
                 WorkDateTime = LastDayFound;
 
             return WorkDateTime;
-
         }
         private bool DayOfWeekIncluded(DateTime WorkDateTime)
         {
@@ -415,7 +382,7 @@ namespace Scheduler
             // Comprobaciones recurrencia Mensual
             if (this.Type == RecurrenceTypesEnum.Monthly)
             {
-                if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay  &&  (this.MonthlyDay <= 0 || this.MonthlyDay > 31))
+                if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay  &&  (this.MonthlyFixedDay <= 0 || this.MonthlyFixedDay > 31))
                     throw new SchedulerException("El día debe del mes estar comprendido entre 1 y 31.");
             }
         }
@@ -443,7 +410,7 @@ namespace Scheduler
                 case RecurrenceTypesEnum.Monthly:
                     if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay)
                     {
-                        Description = "Occurs on day " + this.MonthlyDay;
+                        Description = "Occurs on day " + this.MonthlyFixedDay;
                     } else
                     {
                         Description = "Occurs the " + Enum.GetName(typeof(DayPositionEnum), this.MonthlyDayPosition).ToLower() + " " + Enum.GetName(typeof(WeekDaysEnum), (WeekDaysEnum)this.WeekDays).ToLower();
