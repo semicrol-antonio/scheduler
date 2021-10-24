@@ -4,6 +4,63 @@ using System.Collections.Generic;
 
 namespace Scheduler
 {
+    public enum RecurrenceTypesEnum
+    {
+        Once,
+        Daily,
+        Weekly,
+        Monthly
+    }
+    public enum TimeIntervalEnum
+    {
+        Hours,
+        Minutes,
+        Seconds
+    }
+    public enum WeekDaysEnum
+    {
+        Sunday = 1,
+        Monday = 2,
+        Tuesday = 4,
+        Wednesday = 8,
+        Thursday = 16,
+        Friday = 32,
+        Saturday = 64,
+        WeekDays = Monday | Tuesday | Wednesday | Thursday | Friday,
+        WeekendDays = Saturday | Sunday,
+        Day = WeekDays | WeekendDays
+    }
+    public enum HourlyFrecuencysEnum
+    {
+        None,
+        OccursOne,
+        OccursEvery
+    }
+    public enum MonthlyFrecuencyEnum
+    {
+        FixedDay,
+        DayPosition
+    }
+    public enum DayPositionEnum
+    {
+        First,
+        Second,
+        Third,
+        Fourth,
+        Last
+    }
+    public enum SupportedLanguagesEnum
+    {
+        es_ES,
+        en_GB,
+        en_US
+    }
+    public class OutData
+    {
+        public DateTime OcurrenceDate;
+        public string NextExecutionTime;
+        public string Description;
+    }
     public class SchedulerConfiguration
     {
         public RecurrenceTypesEnum Type;
