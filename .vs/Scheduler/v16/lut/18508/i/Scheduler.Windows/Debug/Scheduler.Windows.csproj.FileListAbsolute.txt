@@ -1,0 +1,10 @@
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.Windows\bin\Debug\Scheduler.Windows.exe.config
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.Windows\bin\Debug\Scheduler.Windows.exe
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.Windows\Debug\Scheduler.Windows.csproj.AssemblyReference.cache
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.Windows\Debug\Scheduler.Form1.resources
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.Windows\Debug\Scheduler.Windows.Properties.Resources.resources
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.Windows\Debug\Scheduler.Windows.csproj.GenerateResource.cache
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.Windows\Debug\Scheduler.Windows.exe.licenses
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.Windows\Debug\Scheduler.Windows.csproj.CoreCompileInputs.cache
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.Windows\Debug\Scheduler.Windows.csproj.CopyComplete
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.Windows\Debug\Scheduler.Windows.exe

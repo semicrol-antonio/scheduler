@@ -1,0 +1,3 @@
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.AssemblyInfoInputs.cache
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.AssemblyInfo.cs

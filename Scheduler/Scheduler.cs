@@ -41,13 +41,19 @@ namespace Scheduler
         FixedDay,
         DayPosition
     }
-    public enum DayPositionEnum 
+    public enum DayPositionEnum
     {
         First,
         Second,
         Third,
         Fourth,
         Last
+    }
+    public enum SupportedLanguagesEnum
+    {
+        es_ES,
+        en_GB,
+        en_US
     }
     public struct OutData
     {
@@ -71,6 +77,7 @@ namespace Scheduler
         public DateTime CurrentDate;
         public int WeekDays = 0;
 
+
         // Hourly Frecuency;
         public HourlyFrecuencysEnum HourlyFrecuency;
         public DateTime HourlyOccursAt;
@@ -83,6 +90,24 @@ namespace Scheduler
         public int MonthlyFixedDay;
         public DayPositionEnum MonthlyDayPosition;
 
+        private SupportedLanguagesEnum language;
+        private SchedulerLanguage LanguageManager = new SchedulerLanguage(SupportedLanguagesEnum.es_ES);
+
+        public SupportedLanguagesEnum Language
+        {
+            get { return language; }
+            set { 
+                language = value;
+                LanguageManager = new SchedulerLanguage(language);
+            }
+        }
+
+
+
+
+
+
+
 
 
 
@@ -90,16 +115,16 @@ namespace Scheduler
         {
             InputValidations();
 
-            
+
             OutData salida = new OutData();
-           
+
             switch (Type)
             {
                 case RecurrenceTypesEnum.Once:
                     salida.OcurrenceDate = OneOcurrence();
                     break;
                 case RecurrenceTypesEnum.Daily:
-                    salida.OcurrenceDate  = DailyRecurrence(this.CurrentDate ,this.Periodicity);
+                    salida.OcurrenceDate = DailyRecurrence(this.CurrentDate, this.Periodicity);
                     break;
                 case RecurrenceTypesEnum.Weekly:
                     salida.OcurrenceDate = WeeklyRecurrence();
@@ -114,7 +139,8 @@ namespace Scheduler
             if (this.EndDate != DateTime.MinValue && salida.OcurrenceDate > EndDate)
                 throw new SchedulerException("La ocurrencia calculada supera la fecha limite establecida.");
 
-            salida.NextExecutionTime = salida.OcurrenceDate.ToString("dd/MM/yyyy HH:mm");
+            salida.NextExecutionTime = LanguageManager.GetLanguageDateTimeFormatted(salida.OcurrenceDate);
+//            salida.NextExecutionTime = salida.OcurrenceDate.ToString("dd/MM/yyyy HH:mm");
             salida.Description = DescriptionMount(salida);
 
             return salida;
@@ -127,7 +153,7 @@ namespace Scheduler
 
             return salida;
         }
-        private DateTime HourlyRecurrence(DateTime CurrentDate,bool First)
+        private DateTime HourlyRecurrence(DateTime CurrentDate, bool First)
         {
             DateTime WorkDateTime;
 
@@ -156,7 +182,7 @@ namespace Scheduler
             return WorkDateTime;
         }
 
-        private DateTime DailyRecurrence(DateTime CurrentDate,int DailyPeriodicity)
+        private DateTime DailyRecurrence(DateTime CurrentDate, int DailyPeriodicity)
         {
             DateTime Salida;
             DateTime WorkDateTime;
@@ -165,7 +191,7 @@ namespace Scheduler
             switch (this.HourlyFrecuency)
             {
                 case HourlyFrecuencysEnum.OccursOne:
-                    Salida = HourlyRecurrence(WorkDateTime,false);
+                    Salida = HourlyRecurrence(WorkDateTime, false);
                     if (Salida != DateTime.MinValue)
                         WorkDateTime = Salida;
                     else
@@ -175,7 +201,7 @@ namespace Scheduler
                     }
                     break;
                 case HourlyFrecuencysEnum.OccursEvery:
-                    Salida = HourlyRecurrence(WorkDateTime,false);
+                    Salida = HourlyRecurrence(WorkDateTime, false);
                     if (Salida != DateTime.MinValue)
                         WorkDateTime = Salida;
                     else
@@ -205,7 +231,7 @@ namespace Scheduler
                 {
                     if (this.HourlyFrecuency != HourlyFrecuencysEnum.None)
                     {
-                        var tmp_datetime = this.HourlyRecurrence(WorkDateTime,WorkDateTime != this.CurrentDate );
+                        var tmp_datetime = this.HourlyRecurrence(WorkDateTime, WorkDateTime != this.CurrentDate);
                         if (tmp_datetime != DateTime.MinValue)
                         {
                             WorkDateTime = tmp_datetime;
@@ -215,7 +241,11 @@ namespace Scheduler
                     }
                     else
                         if (WorkDateTime != this.CurrentDate)
+                        {
+                            WorkDateTime = WorkDateTime.SetTime(CurrentDate.Hour, CurrentDate.Minute, CurrentDate.Second);
                             break;
+                        }
+                        
                 }
                 WorkDateTime = WorkDateTime.AddDays(1);
                 WorkDateTime = WorkDateTime.SetTime(0, 0, 0);
@@ -241,7 +271,7 @@ namespace Scheduler
             while (true)
             {
                 if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay)
-                    datetime_tmp = GetDateByDayFixed(this.MonthlyFixedDay , WorkDateTime);
+                    datetime_tmp = GetDateByDayFixed(this.MonthlyFixedDay, WorkDateTime);
                 else
                     datetime_tmp = GetDateByDayPosition(this.MonthlyDayPosition, this.WeekDays, WorkDateTime);
                 if (WorkDateTime <= datetime_tmp)
@@ -267,10 +297,10 @@ namespace Scheduler
                 WorkDateTime = new DateTime(CurrentDate.Year, CurrentDate.Month, 1, 0, 0, 0);
                 WorkDateTime = WorkDateTime.AddMonths(this.Periodicity);
             }
-            
+
             return WorkDateTime;
         }
-        private DateTime GetDateByDayFixed(int FixedDay,DateTime BeginDate)
+        private DateTime GetDateByDayFixed(int FixedDay, DateTime BeginDate)
         {
             DateTime WorkDateTime;
             int day_tmp;
@@ -288,23 +318,23 @@ namespace Scheduler
 
             return WorkDateTime;
         }
-        private DateTime GetDateByDayPosition(DayPositionEnum search_position, int weekDays,DateTime WorkDateTime)
+        private DateTime GetDateByDayPosition(DayPositionEnum search_position, int weekDays, DateTime WorkDateTime)
         {
             int Position = 99;
-            DateTime LastDayFound = DateTime.MinValue ;
+            DateTime LastDayFound = DateTime.MinValue;
             int ActualMonth = WorkDateTime.Month;
             int Contador = 0;
 
             if (search_position != DayPositionEnum.Last)
                 Position = (int)search_position + 1;
 
-            WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, 1,WorkDateTime.Hour,WorkDateTime.Minute,WorkDateTime.Second);
+            WorkDateTime = new DateTime(WorkDateTime.Year, WorkDateTime.Month, 1, WorkDateTime.Hour, WorkDateTime.Minute, WorkDateTime.Second);
 
             // Procesa todos los días del mes de la fecha recibida
             while (ActualMonth == WorkDateTime.Month)
             {
                 // Si el dia actual es lunes comprueba si se esta buscando el lunes, Dia de la semana de trabajo o cualquier dia. Lo mismo para el resto de los dias de la semana (Salvo sabados y domingos)
-                if ((WorkDateTime.DayOfWeek == DayOfWeek.Monday && (weekDays == (int)WeekDaysEnum.Monday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day))||
+                if ((WorkDateTime.DayOfWeek == DayOfWeek.Monday && (weekDays == (int)WeekDaysEnum.Monday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day)) ||
                 (WorkDateTime.DayOfWeek == DayOfWeek.Tuesday && (weekDays == (int)WeekDaysEnum.Tuesday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day)) ||
                 (WorkDateTime.DayOfWeek == DayOfWeek.Wednesday && (weekDays == (int)WeekDaysEnum.Wednesday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day)) ||
                 (WorkDateTime.DayOfWeek == DayOfWeek.Thursday && (weekDays == (int)WeekDaysEnum.Thursday || weekDays == (int)WeekDaysEnum.WeekDays || weekDays == (int)WeekDaysEnum.Day)) ||
@@ -382,21 +412,20 @@ namespace Scheduler
             // Comprobaciones recurrencia Mensual
             if (this.Type == RecurrenceTypesEnum.Monthly)
             {
-                if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay  &&  (this.MonthlyFixedDay <= 0 || this.MonthlyFixedDay > 31))
+                if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay && (this.MonthlyFixedDay <= 0 || this.MonthlyFixedDay > 31))
                     throw new SchedulerException("El día debe del mes estar comprendido entre 1 y 31.");
             }
         }
         private int GetWeekNumber(DateTime ActualDate)
         {
-            CultureInfo ciCurr = CultureInfo.CurrentCulture;
-            int weekNum = ciCurr.Calendar.GetWeekOfYear(ActualDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+            int weekNum = LanguageManager.GetWeekOfYear(ActualDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
             return weekNum;
         }
         private string DescriptionMount(OutData salida)
         {
             string Description = "";
 
-            switch(this.Type)
+            switch (this.Type)
             {
                 case RecurrenceTypesEnum.Once:
                     Description = "Occurs One";
@@ -405,13 +434,14 @@ namespace Scheduler
                     Description = "Occurs every " + this.Periodicity + " day(s)";
                     break;
                 case RecurrenceTypesEnum.Weekly:
-                    Description = "Occurs every " + this.Periodicity + " week(s) on "+StringDays();
+                    Description = "Occurs every " + this.Periodicity + " week(s) on " + StringDays();
                     break;
                 case RecurrenceTypesEnum.Monthly:
                     if (this.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay)
                     {
                         Description = "Occurs on day " + this.MonthlyFixedDay;
-                    } else
+                    }
+                    else
                     {
                         Description = "Occurs the " + Enum.GetName(typeof(DayPositionEnum), this.MonthlyDayPosition).ToLower() + " " + Enum.GetName(typeof(WeekDaysEnum), (WeekDaysEnum)this.WeekDays).ToLower();
                     }
@@ -430,10 +460,10 @@ namespace Scheduler
                 default:
                     break;
             }
-            Description += ". Schedule will be used on " + salida.OcurrenceDate.ToString("dd/MM/yyyy") +
-                            " at " + salida.OcurrenceDate.ToString("HH:mm") + " starting on " + this.StartDate.ToString("dd/MM/yyyy");
+            Description += ". Schedule will be used on " + LanguageManager.GetLanguageDateFormatted  (salida.OcurrenceDate) +
+                            " at " + LanguageManager.GetLanguageTimeFormatted(salida.OcurrenceDate) + " starting on " + LanguageManager.GetLanguageDateFormatted (this.StartDate);
 
-            return Description;
+            return LanguageManager.Traslate(Description);
         }
         private string StringDays()
         {
@@ -441,43 +471,43 @@ namespace Scheduler
 
             if ((this.WeekDays & (int)WeekDaysEnum.Monday) != 0)
             {
-                daystext = "Monday";
+                daystext = "monday";
             }
             if ((this.WeekDays & (int)WeekDaysEnum.Tuesday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "Tuesday";
+                daystext += "tuesday";
             }
             if ((this.WeekDays & (int)WeekDaysEnum.Wednesday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "Wednesday";
+                daystext += "wednesday";
             }
             if ((this.WeekDays & (int)WeekDaysEnum.Thursday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "Thursday";
+                daystext += "thursday";
             }
-            if ((this.WeekDays & (int)WeekDaysEnum.Friday ) != 0)
+            if ((this.WeekDays & (int)WeekDaysEnum.Friday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "Friday";
+                daystext += "friday";
             }
-            if ((this.WeekDays & (int)WeekDaysEnum.Saturday ) != 0)
+            if ((this.WeekDays & (int)WeekDaysEnum.Saturday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "Saturday";
+                daystext += "saturday";
             }
-            if ((this.WeekDays & (int)WeekDaysEnum.Sunday ) != 0)
+            if ((this.WeekDays & (int)WeekDaysEnum.Sunday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "Sunday";
+                daystext += "sunday";
             }
 
 
