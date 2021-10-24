@@ -4,3 +4,9 @@ C:\Users\antonio\source\repos\Scheduler\Scheduler\obj\Debug\Scheduler.csproj.Cor
 C:\Users\antonio\source\repos\Scheduler\Scheduler\obj\Debug\Scheduler.dll
 C:\Users\antonio\source\repos\Scheduler\Scheduler\obj\Debug\Scheduler.pdb
 C:\Users\antonio\source\repos\Scheduler\Scheduler\obj\Debug\Scheduler.csproj.AssemblyReference.cache
+C:\Users\antonio\source\repos\Scheduler_v2\Scheduler\obj\Debug\Scheduler.csproj.CoreCompileInputs.cache
+C:\Users\antonio\source\repos\Scheduler_v2\Scheduler\obj\Debug\Scheduler.dll
+C:\Users\antonio\source\repos\Scheduler_v2\Scheduler\obj\Debug\Scheduler.pdb
+C:\Users\antonio\source\repos\Scheduler_v2\Scheduler\bin\Debug\Scheduler.dll
+C:\Users\antonio\source\repos\Scheduler_v2\Scheduler\bin\Debug\Scheduler.pdb
+C:\Users\antonio\source\repos\Scheduler_v2\Scheduler\obj\Debug\Scheduler.csproj.AssemblyReference.cache

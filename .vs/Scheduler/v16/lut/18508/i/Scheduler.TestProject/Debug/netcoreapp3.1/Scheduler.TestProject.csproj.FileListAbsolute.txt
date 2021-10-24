@@ -1,3 +1,17 @@
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\testhost.dll
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\testhost.exe
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\Microsoft.TestPlatform.PlatformAbstractions.dll
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\xunit.runner.utility.netcoreapp10.dll
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.deps.json
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.runtimeconfig.json
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.runtimeconfig.dev.json
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.dll
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.csproj.AssemblyReference.cache
 C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.AssemblyInfoInputs.cache
 C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.AssemblyInfo.cs
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.csproj.CopyComplete
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.dll
+C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\i\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.genruntimeconfig.cache

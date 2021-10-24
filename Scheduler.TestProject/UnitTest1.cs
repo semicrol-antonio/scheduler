@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Xunit;
+using FluentAssertions;
 
 namespace Scheduler.TestProject
 {
@@ -8,7 +10,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void ExceptionNoCurrentDate()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
 
             sm.Type = RecurrenceTypesEnum.Once;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
@@ -20,7 +22,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void ExceptionNoStartDate()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
 
             sm.Type = RecurrenceTypesEnum.Once;
             sm.CurrentDate = new DateTime(2021, 1, 1, 0, 0, 0);
@@ -33,7 +35,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void ExceptionNoPeriodicityDailyWeekly()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
 
             sm.Type = RecurrenceTypesEnum.Daily;
             sm.CurrentDate = new DateTime(2021, 1, 1, 0, 0, 0);
@@ -55,7 +57,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void ExceptionCurrentDateBelowStartDate()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
 
             sm.Type = RecurrenceTypesEnum.Once;
             sm.CurrentDate = new DateTime(2020, 1, 1, 0, 0, 0);
@@ -70,7 +72,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void ExceptionEndHourMinorStartHour()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
 
             sm.Type = RecurrenceTypesEnum.Daily;
             sm.Periodicity = 1;
@@ -89,7 +91,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void ExceptionLimitEndDateBelowNextDate()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
 
             sm.Type = RecurrenceTypesEnum.Daily;
             sm.Periodicity = 1;
@@ -105,7 +107,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void ExceptionWeeklyWithoutAnyWeekDay()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
 
             sm.Type = RecurrenceTypesEnum.Weekly;
             sm.Periodicity = 1;
@@ -121,7 +123,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void ExceptionHourlyWithoutHourRange()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
 
             sm.Type = RecurrenceTypesEnum.Daily;
             sm.Periodicity = 1;
@@ -137,7 +139,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void ExceptionHourlyWithoutEveryHours()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
 
             sm.Type = RecurrenceTypesEnum.Daily;
             sm.Periodicity = 1;
@@ -158,7 +160,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeOnce()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Once;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
             sm.CurrentDate = new DateTime(2021, 1, 13, 13, 14, 15);
@@ -182,7 +184,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeDaily_NoHourly()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Daily;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
             sm.Periodicity = 2;
@@ -230,7 +232,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeDaily_HourlyFixed()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Daily;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
             sm.Periodicity = 2;
@@ -278,7 +280,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeDaily_HourlyEvery()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Daily;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
             sm.Periodicity = 2;
@@ -392,7 +394,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeWeekly_NoHourly()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Weekly;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
             sm.WeekDays = (int)(WeekDaysEnum.Monday | WeekDaysEnum.Thursday | WeekDaysEnum.Friday); 
@@ -471,7 +473,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeWeekly_HourlyFixed()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Weekly;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
             sm.WeekDays = (int)(WeekDaysEnum.Monday | WeekDaysEnum.Thursday | WeekDaysEnum.Friday);
@@ -548,7 +550,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeWeekly_HourlyEvery()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Weekly;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
             sm.WeekDays = (int)(WeekDaysEnum.Monday | WeekDaysEnum.Thursday | WeekDaysEnum.Friday);
@@ -749,7 +751,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeWeekly_NoHourlyAllWeekDays()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Weekly;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
             sm.WeekDays = (int)(WeekDaysEnum.Monday | WeekDaysEnum.Tuesday | WeekDaysEnum.Wednesday | WeekDaysEnum.Thursday | 
@@ -931,7 +933,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeMonthly_NoHourly_FixedDay()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Monthly;
             sm.MonthlyFrecuency = MonthlyFrecuencyEnum.FixedDay;
             sm.StartDate = new DateTime(2020, 1, 1, 0, 0, 0);
@@ -1045,7 +1047,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeMonthly_NoHourly_DayPosition()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Monthly;
             sm.MonthlyFrecuency = MonthlyFrecuencyEnum.DayPosition;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
@@ -1814,7 +1816,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeMonthly_Hourly_FixedDay()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Monthly;
             sm.MonthlyFrecuency = MonthlyFrecuencyEnum.FixedDay;
             sm.StartDate = new DateTime(2020, 1, 1, 0, 0, 0);
@@ -1987,7 +1989,7 @@ namespace Scheduler.TestProject
         [Fact]
         public void TypeMonthly_Hourly_DayPosition()
         {
-            SchedulerManager sm = new SchedulerManager();
+            SchedulerConfiguration sm = new SchedulerConfiguration();
             sm.Type = RecurrenceTypesEnum.Monthly;
             sm.MonthlyFrecuency = MonthlyFrecuencyEnum.DayPosition;
             sm.StartDate = new DateTime(2021, 1, 1, 0, 0, 0);
@@ -2922,7 +2924,233 @@ namespace Scheduler.TestProject
             Assert.Equal(data.Description, "Occurs the last weekdays of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/12/2021 at 04:00 starting on 01/01/2021");
 
         }
+        [Fact]
+        public void TypeMonthly_Hourly_FixedDay_Serial_50_Ocurrences()
+        {
+            SchedulerConfiguration sc = new SchedulerConfiguration
+            {
+                Type = RecurrenceTypesEnum.Monthly,
+                MonthlyFrecuency = MonthlyFrecuencyEnum.FixedDay,
+                StartDate = new DateTime(2021, 1, 1, 0, 0, 0),
+                EndDate = new DateTime(2022, 12, 31, 0, 0, 0),
+                MonthlyFixedDay = 31,
+                Periodicity = 2,
+                HourlyFrecuency = HourlyFrecuencysEnum.OccursEvery,
+                HourlyStartAt = new DateTime(1001, 1, 1, 4, 0, 0),
+                HourlyEndAt = new DateTime(1001, 1, 1, 8, 0, 0),
+                HourlyOccursEvery = 2,
+                Language = SupportedLanguagesEnum.es_ES,
+                CurrentDate = new DateTime(2021, 1, 1, 0, 0, 0)
+            };
 
+            var result = sc.CalculateSerieByOcurrenceNumber(50);
+            result.Count.Should().Be(50);
+
+            result[0].OcurrenceDate.Should().Be(new DateTime(2021, 1, 31, 4, 0, 0));
+            result[1].OcurrenceDate.Should().Be(new DateTime(2021, 1, 31, 6, 0, 0));
+            result[2].OcurrenceDate.Should().Be(new DateTime(2021, 1, 31, 8, 0, 0));
+            result[3].OcurrenceDate.Should().Be(new DateTime(2021, 3, 31, 4, 0, 0));
+            result[4].OcurrenceDate.Should().Be(new DateTime(2021, 3, 31, 6, 0, 0));
+            result[5].OcurrenceDate.Should().Be(new DateTime(2021, 3, 31, 8, 0, 0));
+            result[6].OcurrenceDate.Should().Be(new DateTime(2021, 5, 31, 4, 0, 0));
+            result[7].OcurrenceDate.Should().Be(new DateTime(2021, 5, 31, 6, 0, 0));
+            result[8].OcurrenceDate.Should().Be(new DateTime(2021, 5, 31, 8, 0, 0));
+            result[9].OcurrenceDate.Should().Be(new DateTime(2021, 7, 31, 4, 0, 0));
+            result[10].OcurrenceDate.Should().Be(new DateTime(2021, 7, 31, 6, 0, 0));
+            result[11].OcurrenceDate.Should().Be(new DateTime(2021, 7, 31, 8, 0, 0));
+            result[12].OcurrenceDate.Should().Be(new DateTime(2021, 9, 30, 4, 0, 0));
+            result[13].OcurrenceDate.Should().Be(new DateTime(2021, 9, 30, 6, 0, 0));
+            result[14].OcurrenceDate.Should().Be(new DateTime(2021, 9, 30, 8, 0, 0));
+            result[15].OcurrenceDate.Should().Be(new DateTime(2021, 11, 30, 4, 0, 0));
+            result[16].OcurrenceDate.Should().Be(new DateTime(2021, 11, 30, 6, 0, 0));
+            result[17].OcurrenceDate.Should().Be(new DateTime(2021, 11, 30, 8, 0, 0));
+            result[18].OcurrenceDate.Should().Be(new DateTime(2022, 1, 31, 4, 0, 0));
+            result[19].OcurrenceDate.Should().Be(new DateTime(2022, 1, 31, 6, 0, 0));
+            result[20].OcurrenceDate.Should().Be(new DateTime(2022, 1, 31, 8, 0, 0));
+            result[21].OcurrenceDate.Should().Be(new DateTime(2022, 3, 31, 4, 0, 0));
+            result[22].OcurrenceDate.Should().Be(new DateTime(2022, 3, 31, 6, 0, 0));
+            result[23].OcurrenceDate.Should().Be(new DateTime(2022, 3, 31, 8, 0, 0));
+            result[24].OcurrenceDate.Should().Be(new DateTime(2022, 5, 31, 4, 0, 0));
+            result[25].OcurrenceDate.Should().Be(new DateTime(2022, 5, 31, 6, 0, 0));
+            result[26].OcurrenceDate.Should().Be(new DateTime(2022, 5, 31, 8, 0, 0));
+            result[27].OcurrenceDate.Should().Be(new DateTime(2022, 7, 31, 4, 0, 0));
+            result[28].OcurrenceDate.Should().Be(new DateTime(2022, 7, 31, 6, 0, 0));
+            result[29].OcurrenceDate.Should().Be(new DateTime(2022, 7, 31, 8, 0, 0));
+            result[30].OcurrenceDate.Should().Be(new DateTime(2022, 9, 30, 4, 0, 0));
+            result[31].OcurrenceDate.Should().Be(new DateTime(2022, 9, 30, 6, 0, 0));
+            result[32].OcurrenceDate.Should().Be(new DateTime(2022, 9, 30, 8, 0, 0));
+            result[33].OcurrenceDate.Should().Be(new DateTime(2022, 11, 30, 4, 0, 0));
+            result[34].OcurrenceDate.Should().Be(new DateTime(2022, 11, 30, 6, 0, 0));
+            result[35].OcurrenceDate.Should().Be(new DateTime(2022, 11, 30, 8, 0, 0));
+            result[36].OcurrenceDate.Should().Be(new DateTime(2023, 1, 31, 4, 0, 0));
+            result[37].OcurrenceDate.Should().Be(new DateTime(2023, 1, 31, 6, 0, 0));
+            result[38].OcurrenceDate.Should().Be(new DateTime(2023, 1, 31, 8, 0, 0));
+            result[39].OcurrenceDate.Should().Be(new DateTime(2023, 3, 31, 4, 0, 0));
+            result[40].OcurrenceDate.Should().Be(new DateTime(2023, 3, 31, 6, 0, 0));
+            result[41].OcurrenceDate.Should().Be(new DateTime(2023, 3, 31, 8, 0, 0));
+            result[42].OcurrenceDate.Should().Be(new DateTime(2023, 5, 31, 4, 0, 0));
+            result[43].OcurrenceDate.Should().Be(new DateTime(2023, 5, 31, 6, 0, 0));
+            result[44].OcurrenceDate.Should().Be(new DateTime(2023, 5, 31, 8, 0, 0));
+            result[45].OcurrenceDate.Should().Be(new DateTime(2023, 7, 31, 4, 0, 0));
+            result[46].OcurrenceDate.Should().Be(new DateTime(2023, 7, 31, 6, 0, 0));
+            result[47].OcurrenceDate.Should().Be(new DateTime(2023, 7, 31, 8, 0, 0));
+            result[48].OcurrenceDate.Should().Be(new DateTime(2023, 9, 30, 4, 0, 0));
+            result[49].OcurrenceDate.Should().Be(new DateTime(2023, 9, 30, 6, 0, 0));
+
+            result[0].Description.Should().Be(@"Ocurre el dia 31 de cada 2 mes(es). Cada 2 hora(s) entre 04:00 y 08:00. La siguiente cita se producirá el 31/01/2021 a las 4:00 comenzando el 01/01/2021");
+            result[49].Description.Should().Be(@"Ocurre el dia 31 de cada 2 mes(es). Cada 2 hora(s) entre 04:00 y 08:00. La siguiente cita se producirá el 30/09/2023 a las 6:00 comenzando el 01/01/2021");
+
+            // ENGLISH UK
+            sc.CurrentDate = new DateTime(2021, 1, 1, 0, 0, 0);
+            sc.Language = SupportedLanguagesEnum.en_GB;
+            result = sc.CalculateSerieByOcurrenceNumber(50);
+            result[0].Description.Should().Be(@"Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 31/01/2021 at 04:00 starting on 01/01/2021");
+            result[49].Description.Should().Be(@"Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 30/09/2023 at 06:00 starting on 01/01/2021");
+
+            // ENGLISH US
+            sc.CurrentDate = new DateTime(2021, 1, 1, 0, 0, 0);
+            sc.Language = SupportedLanguagesEnum.en_US;
+            result = sc.CalculateSerieByOcurrenceNumber(50);
+            result[0].Description.Should().Be(@"Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 1/31/2021 at 4:00 AM starting on 1/1/2021");
+            result[49].Description.Should().Be(@"Occurs on day 31 of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 9/30/2023 at 6:00 AM starting on 1/1/2021");
+
+
+        }
+        [Fact]
+        public void TypeMonthly_Hourly_DayPosition_Serial_DateRange()
+        {
+            SchedulerConfiguration sc = new SchedulerConfiguration
+            {
+                Type = RecurrenceTypesEnum.Monthly,
+                MonthlyFrecuency = MonthlyFrecuencyEnum.DayPosition,
+                StartDate = new DateTime(2021, 1, 1, 0, 0, 0),
+                EndDate = new DateTime(2025, 12, 31, 0, 0, 0),
+                Periodicity = 2,
+                HourlyFrecuency = HourlyFrecuencysEnum.OccursEvery,
+                HourlyStartAt = new DateTime(1001, 1, 1, 4, 0, 0),
+                HourlyEndAt = new DateTime(1001, 1, 1, 8, 0, 0),
+                HourlyOccursEvery = 2,
+                Language = SupportedLanguagesEnum.es_ES,
+                CurrentDate = new DateTime(2021, 1, 1, 0, 0, 0),
+                MonthlyDayPosition = DayPositionEnum.First,
+                WeekDays = (int)WeekDaysEnum.Monday
+
+            };
+
+            var result = sc.CalculateSerieByLimitsDate();
+            result.Count.Should().Be(90);
+
+            result[0].OcurrenceDate.Should().Be(new DateTime(2021, 1, 4, 4, 0, 0));
+            result[1].OcurrenceDate.Should().Be(new DateTime(2021, 1, 4, 6, 0, 0));
+            result[2].OcurrenceDate.Should().Be(new DateTime(2021, 1, 4, 8, 0, 0));
+            result[3].OcurrenceDate.Should().Be(new DateTime(2021, 3, 1, 4, 0, 0));
+            result[4].OcurrenceDate.Should().Be(new DateTime(2021, 3, 1, 6, 0, 0));
+            result[5].OcurrenceDate.Should().Be(new DateTime(2021, 3, 1, 8, 0, 0));
+            result[6].OcurrenceDate.Should().Be(new DateTime(2021, 5, 3, 4, 0, 0));
+            result[7].OcurrenceDate.Should().Be(new DateTime(2021, 5, 3, 6, 0, 0));
+            result[8].OcurrenceDate.Should().Be(new DateTime(2021, 5, 3, 8, 0, 0));
+            result[9].OcurrenceDate.Should().Be(new DateTime(2021, 7, 5, 4, 0, 0));
+            result[10].OcurrenceDate.Should().Be(new DateTime(2021, 7, 5, 6, 0, 0));
+            result[11].OcurrenceDate.Should().Be(new DateTime(2021, 7, 5, 8, 0, 0));
+            result[12].OcurrenceDate.Should().Be(new DateTime(2021, 9, 6, 4, 0, 0));
+            result[13].OcurrenceDate.Should().Be(new DateTime(2021, 9, 6, 6, 0, 0));
+            result[14].OcurrenceDate.Should().Be(new DateTime(2021, 9, 6, 8, 0, 0));
+            result[15].OcurrenceDate.Should().Be(new DateTime(2021, 11, 1, 4, 0, 0));
+            result[16].OcurrenceDate.Should().Be(new DateTime(2021, 11, 1, 6, 0, 0));
+            result[17].OcurrenceDate.Should().Be(new DateTime(2021, 11, 1, 8, 0, 0));
+            result[18].OcurrenceDate.Should().Be(new DateTime(2022, 1, 3, 4, 0, 0));
+            result[19].OcurrenceDate.Should().Be(new DateTime(2022, 1, 3, 6, 0, 0));
+            result[20].OcurrenceDate.Should().Be(new DateTime(2022, 1, 3, 8, 0, 0));
+            result[21].OcurrenceDate.Should().Be(new DateTime(2022, 3, 7, 4, 0, 0));
+            result[22].OcurrenceDate.Should().Be(new DateTime(2022, 3, 7, 6, 0, 0));
+            result[23].OcurrenceDate.Should().Be(new DateTime(2022, 3, 7, 8, 0, 0));
+            result[24].OcurrenceDate.Should().Be(new DateTime(2022, 5, 2, 4, 0, 0));
+            result[25].OcurrenceDate.Should().Be(new DateTime(2022, 5, 2, 6, 0, 0));
+            result[26].OcurrenceDate.Should().Be(new DateTime(2022, 5, 2, 8, 0, 0));
+            result[27].OcurrenceDate.Should().Be(new DateTime(2022, 7, 4, 4, 0, 0));
+            result[28].OcurrenceDate.Should().Be(new DateTime(2022, 7, 4, 6, 0, 0));
+            result[29].OcurrenceDate.Should().Be(new DateTime(2022, 7, 4, 8, 0, 0));
+            result[30].OcurrenceDate.Should().Be(new DateTime(2022, 9, 5, 4, 0, 0));
+            result[31].OcurrenceDate.Should().Be(new DateTime(2022, 9, 5, 6, 0, 0));
+            result[32].OcurrenceDate.Should().Be(new DateTime(2022, 9, 5, 8, 0, 0));
+            result[33].OcurrenceDate.Should().Be(new DateTime(2022, 11, 7, 4, 0, 0));
+            result[34].OcurrenceDate.Should().Be(new DateTime(2022, 11, 7, 6, 0, 0));
+            result[35].OcurrenceDate.Should().Be(new DateTime(2022, 11, 7, 8, 0, 0));
+            result[36].OcurrenceDate.Should().Be(new DateTime(2023, 1, 2, 4, 0, 0));
+            result[37].OcurrenceDate.Should().Be(new DateTime(2023, 1, 2, 6, 0, 0));
+            result[38].OcurrenceDate.Should().Be(new DateTime(2023, 1, 2, 8, 0, 0));
+            result[39].OcurrenceDate.Should().Be(new DateTime(2023, 3, 6, 4, 0, 0));
+            result[40].OcurrenceDate.Should().Be(new DateTime(2023, 3, 6, 6, 0, 0));
+            result[41].OcurrenceDate.Should().Be(new DateTime(2023, 3, 6, 8, 0, 0));
+            result[42].OcurrenceDate.Should().Be(new DateTime(2023, 5, 1, 4, 0, 0));
+            result[43].OcurrenceDate.Should().Be(new DateTime(2023, 5, 1, 6, 0, 0));
+            result[44].OcurrenceDate.Should().Be(new DateTime(2023, 5, 1, 8, 0, 0));
+            result[45].OcurrenceDate.Should().Be(new DateTime(2023, 7, 3, 4, 0, 0));
+            result[46].OcurrenceDate.Should().Be(new DateTime(2023, 7, 3, 6, 0, 0));
+            result[47].OcurrenceDate.Should().Be(new DateTime(2023, 7, 3, 8, 0, 0));
+            result[48].OcurrenceDate.Should().Be(new DateTime(2023, 9, 4, 4, 0, 0));
+            result[49].OcurrenceDate.Should().Be(new DateTime(2023, 9, 4, 6, 0, 0));
+            result[50].OcurrenceDate.Should().Be(new DateTime(2023, 9, 4, 8, 0, 0));
+            result[51].OcurrenceDate.Should().Be(new DateTime(2023, 11, 6, 4, 0, 0));
+            result[52].OcurrenceDate.Should().Be(new DateTime(2023, 11, 6, 6, 0, 0));
+            result[53].OcurrenceDate.Should().Be(new DateTime(2023, 11, 6, 8, 0, 0));
+            result[54].OcurrenceDate.Should().Be(new DateTime(2024, 1, 1, 4, 0, 0));
+            result[55].OcurrenceDate.Should().Be(new DateTime(2024, 1, 1, 6, 0, 0));
+            result[56].OcurrenceDate.Should().Be(new DateTime(2024, 1, 1, 8, 0, 0));
+            result[57].OcurrenceDate.Should().Be(new DateTime(2024, 3, 4, 4, 0, 0));
+            result[58].OcurrenceDate.Should().Be(new DateTime(2024, 3, 4, 6, 0, 0));
+            result[59].OcurrenceDate.Should().Be(new DateTime(2024, 3, 4, 8, 0, 0));
+            result[60].OcurrenceDate.Should().Be(new DateTime(2024, 5, 6, 4, 0, 0));
+            result[61].OcurrenceDate.Should().Be(new DateTime(2024, 5, 6, 6, 0, 0));
+            result[62].OcurrenceDate.Should().Be(new DateTime(2024, 5, 6, 8, 0, 0));
+            result[63].OcurrenceDate.Should().Be(new DateTime(2024, 7, 1, 4, 0, 0));
+            result[64].OcurrenceDate.Should().Be(new DateTime(2024, 7, 1, 6, 0, 0));
+            result[65].OcurrenceDate.Should().Be(new DateTime(2024, 7, 1, 8, 0, 0));
+            result[66].OcurrenceDate.Should().Be(new DateTime(2024, 9, 2, 4, 0, 0));
+            result[67].OcurrenceDate.Should().Be(new DateTime(2024, 9, 2, 6, 0, 0));
+            result[68].OcurrenceDate.Should().Be(new DateTime(2024, 9, 2, 8, 0, 0));
+            result[69].OcurrenceDate.Should().Be(new DateTime(2024, 11, 4, 4, 0, 0));
+            result[70].OcurrenceDate.Should().Be(new DateTime(2024, 11, 4, 6, 0, 0));
+            result[71].OcurrenceDate.Should().Be(new DateTime(2024, 11, 4, 8, 0, 0));
+            result[72].OcurrenceDate.Should().Be(new DateTime(2025, 1, 6, 4, 0, 0));
+            result[73].OcurrenceDate.Should().Be(new DateTime(2025, 1, 6, 6, 0, 0));
+            result[74].OcurrenceDate.Should().Be(new DateTime(2025, 1, 6, 8, 0, 0));
+            result[75].OcurrenceDate.Should().Be(new DateTime(2025, 3, 3, 4, 0, 0));
+            result[76].OcurrenceDate.Should().Be(new DateTime(2025, 3, 3, 6, 0, 0));
+            result[77].OcurrenceDate.Should().Be(new DateTime(2025, 3, 3, 8, 0, 0));
+            result[78].OcurrenceDate.Should().Be(new DateTime(2025, 5, 5, 4, 0, 0));
+            result[79].OcurrenceDate.Should().Be(new DateTime(2025, 5, 5, 6, 0, 0));
+            result[80].OcurrenceDate.Should().Be(new DateTime(2025, 5, 5, 8, 0, 0));
+            result[81].OcurrenceDate.Should().Be(new DateTime(2025, 7, 7, 4, 0, 0));
+            result[82].OcurrenceDate.Should().Be(new DateTime(2025, 7, 7, 6, 0, 0));
+            result[83].OcurrenceDate.Should().Be(new DateTime(2025, 7, 7, 8, 0, 0));
+            result[84].OcurrenceDate.Should().Be(new DateTime(2025, 9, 1, 4, 0, 0));
+            result[85].OcurrenceDate.Should().Be(new DateTime(2025, 9, 1, 6, 0, 0));
+            result[86].OcurrenceDate.Should().Be(new DateTime(2025, 9, 1, 8, 0, 0));
+            result[87].OcurrenceDate.Should().Be(new DateTime(2025, 11, 3, 4, 0, 0));
+            result[88].OcurrenceDate.Should().Be(new DateTime(2025, 11, 3, 6, 0, 0));
+            result[89].OcurrenceDate.Should().Be(new DateTime(2025, 11, 3, 8, 0, 0));
+           
+
+            
+            result[0].Description.Should().Be(@"Ocurre el primer lunes de cada 2 mes(es). Cada 2 hora(s) entre 04:00 y 08:00. La siguiente cita se producirá el 04/01/2021 a las 4:00 comenzando el 01/01/2021");
+            result[89].Description.Should().Be(@"Ocurre el primer lunes de cada 2 mes(es). Cada 2 hora(s) entre 04:00 y 08:00. La siguiente cita se producirá el 03/11/2025 a las 8:00 comenzando el 01/01/2021");
+
+            // ENGLISH UK
+            sc.CurrentDate = new DateTime(2021, 1, 1, 0, 0, 0);
+            sc.Language = SupportedLanguagesEnum.en_GB;
+            result = sc.CalculateSerieByLimitsDate();
+            result[0].Description.Should().Be(@"Occurs the first monday of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 04/01/2021 at 04:00 starting on 01/01/2021");
+            result[89].Description.Should().Be(@"Occurs the first monday of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 03/11/2025 at 08:00 starting on 01/01/2021");
+
+            // ENGLISH US
+            sc.CurrentDate = new DateTime(2021, 1, 1, 0, 0, 0);
+            sc.Language = SupportedLanguagesEnum.en_US;
+            result = sc.CalculateSerieByLimitsDate();
+            result[0].Description.Should().Be(@"Occurs the first monday of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 1/4/2021 at 4:00 AM starting on 1/1/2021");
+            result[89].Description.Should().Be(@"Occurs the first monday of every 2 month(s). Every 2 hour(s) between 04:00 and 08:00. Schedule will be used on 11/3/2025 at 8:00 AM starting on 1/1/2021");
+
+                    
+        }
     }
-
 }
