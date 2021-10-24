@@ -68,11 +68,11 @@ namespace Scheduler
 
 
 
-    public class SchedulerException : Exception
+    internal class SchedulerException : Exception
     {
         public SchedulerException(String mensaje) : base(mensaje) { }
     }
-    public class SchedulerManager
+    internal class SchedulerManager
     {
         private SchedulerConfiguration conf;
         public SchedulerManager(SchedulerConfiguration Configuration) 

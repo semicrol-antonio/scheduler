@@ -1,0 +1,49 @@
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(18,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(30,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(45,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(50,32): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(68,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(87,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(103,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(118,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(135,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(153,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\UnitTest1.cs(945,42): error CS0122: 'SchedulerException' no es accesible debido a su nivel de protección
+[17:11:21.481 Verbose] - BuildManager - C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Roslyn\Microsoft.CSharp.Core.targets(71,5): error MSB4181: La tarea "Csc" devolvió false, pero no registró un error.
+[17:11:21.486 Verbose] - BuildManager - Faltan algunas de las rutas de acceso de archivo definidas en csproj en la ruta de acceso de compilación de Live Unit Testing. Compruebe si estos archivos deben estar presentes en dicha ruta de acceso y, si es necesario, actualice la definición de csproj para que los busque en otro lugar.
+[17:11:21.486 Verbose] - BuildManager - Elemento _OutputPathItem "C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\" evaluado mediante
+_OutputPathItem: '$(OutDir)' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:309
+  OutDir: '$(OutputPath)' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:227
+    OutputPath: '$(OutputPath)$(TargetFramework.ToLowerInvariant())\' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.TargetFrameworkInference.targets:242
+      OutputPath: '$(BaseOutputPath)$(Configuration)\' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultOutputPaths.targets:33
+        BaseOutputPath: 'C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\' @ C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\Scheduler.TestProject.csproj:0
+        Configuration: 'Debug'
+[17:11:21.486 Verbose] - BuildManager - Elemento AppConfigFileDestination "C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.dll.config" evaluado mediante
+AppConfigFileDestination: '$(OutDir)$(TargetFileName).config' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:337
+  OutDir: '$(OutputPath)' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:227
+    OutputPath: '$(OutputPath)$(TargetFramework.ToLowerInvariant())\' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.TargetFrameworkInference.targets:242
+      OutputPath: '$(BaseOutputPath)$(Configuration)\' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultOutputPaths.targets:33
+        BaseOutputPath: 'C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\' @ C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\Scheduler.TestProject.csproj:0
+        Configuration: 'Debug'
+  TargetFileName: '$(TargetName)$(TargetExt)' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:247
+    TargetName: '$(AssemblyName)' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:239
+      AssemblyName: '$(MSBuildProjectName)' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props:32
+        MSBuildProjectName: 'Scheduler.TestProject'
+    TargetExt: '.dll' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.BeforeCommon.targets:99
+[17:11:21.487 Verbose] - BuildManager - Elemento _DebugSymbolsOutputPath "C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\Scheduler.TestProject.pdb" evaluado mediante
+_DebugSymbolsOutputPath: '@(_DebugSymbolsIntermediatePath->'$(OutDir)%(Filename)%(Extension)')' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:403
+  OutDir: '$(OutputPath)' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:227
+    OutputPath: '$(OutputPath)$(TargetFramework.ToLowerInvariant())\' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.TargetFrameworkInference.targets:242
+      OutputPath: '$(BaseOutputPath)$(Configuration)\' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultOutputPaths.targets:33
+        BaseOutputPath: 'C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\' @ C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\Scheduler.TestProject.csproj:0
+        Configuration: 'Debug'
+[17:11:21.487 Verbose] - BuildManager - Elemento _ApplicationManifestFinal "C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\Debug\netcoreapp3.1\Native.Scheduler.TestProject.manifest" evaluado mediante
+_ApplicationManifestFinal: '$(OutDir)$(_DeploymentTargetApplicationManifestFileName)' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:441
+  OutDir: '$(OutputPath)' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:227
+    OutputPath: '$(OutputPath)$(TargetFramework.ToLowerInvariant())\' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.TargetFrameworkInference.targets:242
+      OutputPath: '$(BaseOutputPath)$(Configuration)\' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultOutputPaths.targets:33
+        BaseOutputPath: 'C:\Users\antonio\source\repos\Scheduler\.vs\Scheduler\v16\lut\18508\b\Scheduler.TestProject\' @ C:\Users\antonio\source\repos\Scheduler\Scheduler.TestProject\Scheduler.TestProject.csproj:0
+        Configuration: 'Debug'
+  _DeploymentTargetApplicationManifestFileName: 'Native.$(AssemblyName).manifest' @ C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets:263
+    AssemblyName: '$(MSBuildProjectName)' @ C:\Program Files\dotnet\sdk\5.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props:32
+      MSBuildProjectName: 'Scheduler.TestProject'
