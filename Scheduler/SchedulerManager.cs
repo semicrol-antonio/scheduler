@@ -7,10 +7,6 @@ using Scheduler;
 namespace Scheduler
 
 {
-    public class SchedulerException : Exception
-    {
-        public SchedulerException(String mensaje) : base(mensaje) { }
-    }
     internal class SchedulerManager
     {
         private SchedulerConfiguration conf;
@@ -21,10 +17,8 @@ namespace Scheduler
 
         public OutData NextOcurrence()
         {
-            InputValidations();
-
-
             OutData salida = new OutData();
+
 
             switch (conf.Type)
             {
@@ -44,8 +38,8 @@ namespace Scheduler
             }
 
 
-            if (conf.EndDate != DateTime.MinValue && salida.OcurrenceDate > conf.EndDate)
-                throw new SchedulerException("La ocurrencia calculada supera la fecha limite establecida.");
+      //      if (conf.EndDate != DateTime.MinValue && salida.OcurrenceDate > conf.EndDate)
+      //          throw new SchedulerException("La ocurrencia calculada supera la fecha limite establecida.");
 
             salida.NextExecutionTime = conf.LanguageManager.GetLanguageDateTimeFormatted(salida.OcurrenceDate);
 //            salida.NextExecutionTime = salida.OcurrenceDate.ToString("dd/MM/yyyy HH:mm");
@@ -280,49 +274,6 @@ namespace Scheduler
             }
 
             return Result;
-        }
-        private void InputValidations()
-        {
-            // Comprueba que se pase la fecha actual para el calculo de la siguiente ocurrencia
-            if (conf.CurrentDate == DateTime.MinValue)
-                throw new SchedulerException("Debe indicar una fecha actual para el calculo de la siguiente ocurrencia");
-
-            if (conf.StartDate == DateTime.MinValue)
-                throw new SchedulerException("Debe indicar la fecha limite de inicio.");
-
-            // Se comprueba que la periodicidad no es igual o inferior a 0 cuando es de tipo diario o semanal
-            if ((conf.Type == RecurrenceTypesEnum.Daily || conf.Type == RecurrenceTypesEnum.Weekly || conf.Type == RecurrenceTypesEnum.Monthly) && conf.Periodicity <= 0)
-                throw new SchedulerException("La Periodicidad debe ser superior a 0.");
-
-
-            // Se comprueba el currentdate no sea inferior a la fecha de inicio
-            if (conf.StartDate != DateTime.MinValue && conf.CurrentDate < conf.StartDate)
-                throw new SchedulerException("La fecha de calculo es inferior a la fecha de inicio establecida");
-
-            // Comprueba que se han indicado algun dia de la semana en la recurrencia semanal
-            if (conf.Type == RecurrenceTypesEnum.Weekly && conf.WeekDays == 0)
-                throw new SchedulerException("Debe indicarse algún día de la semana para la aplicación de la recurrencia semanal.");
-
-            if (conf.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery)
-            {
-                // Si se indica periodicidad horaria se comprueba que se han indicado la hora de limite desde-hasta
-                if (conf.HourlyStartAt == DateTime.MinValue && conf.HourlyEndAt == DateTime.MinValue)
-                    throw new SchedulerException("Debe indicarse las horas limite cuando el modo horario es periodico.");
-                // Se comprueba que la hora desde no es superior a la hora hasta en modo hourly
-                if (conf.HourlyStartAt >= conf.HourlyEndAt)
-                    throw new SchedulerException("La hora 'desde' debe ser inferior a la hora 'hasta'.");
-            }
-
-            // Si estamos en modo hourly periodico se comprueba que se envia la periodicidad de horas
-            if (conf.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery && conf.HourlyOccursEvery <= 0)
-                throw new SchedulerException("Debe indicarse un valor para la periodicidad horaria.");
-
-            // Comprobaciones recurrencia Mensual
-            if (conf.Type == RecurrenceTypesEnum.Monthly)
-            {
-                if (conf.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay && (conf.MonthlyFixedDay <= 0 || conf.MonthlyFixedDay > 31))
-                    throw new SchedulerException("El día debe del mes estar comprendido entre 1 y 31.");
-            }
         }
         private int GetWeekNumber(DateTime ActualDate)
         {
