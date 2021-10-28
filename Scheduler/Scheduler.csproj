@@ -41,6 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerations\Ranges.cs" />
+    <Compile Include="Enumerations\SupportedLanguages.cs" />
+    <Compile Include="Enumerations\DayPositions.cs" />
+    <Compile Include="Enumerations\MonthlyFrecuencies.cs" />
+    <Compile Include="Enumerations\HourlyFrecuencies.cs" />
+    <Compile Include="Enumerations\WeekDays.cs" />
+    <Compile Include="Enumerations\TimeIntervals.cs" />
+    <Compile Include="Enumerations\RecurrenceTypes.cs" />
+    <Compile Include="Exceptions\Exceptions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="SchedulerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using Scheduler;
 
@@ -7,47 +8,67 @@ using Scheduler;
 namespace Scheduler
 
 {
-    internal class SchedulerManager
+    public static class SchedulerManager
     {
-        private SchedulerConfiguration conf;
-        public SchedulerManager(SchedulerConfiguration Configuration) 
+        private static SchedulerConfiguration conf;
+        public static List<OutData> CalculateSerie(this SchedulerConfiguration sc)
+
         {
-            conf = Configuration;
+            int Ocurrences = 0;
+            var salida = new List<OutData>();
+            OutData ocurrencia;
+
+            conf = sc;
+            while (true)
+            {
+                ocurrencia = NextOcurrence();
+                if (sc.Range == RangeEnum.OcurrenceCount)
+                {
+                    Ocurrences++;
+                    if (Ocurrences > sc.OcurrenceCount)
+                        break;
+                }
+                else
+                {
+                    if (ocurrencia.OcurrenceDate >= sc.EndDate)
+                        break;
+                }
+                salida.Add(ocurrencia);
+                sc.CurrentDate = ocurrencia.OcurrenceDate;
+            }
+            return salida;
         }
 
-        public OutData NextOcurrence()
+        private static OutData NextOcurrence()
         {
             OutData salida = new OutData();
-
 
             switch (conf.Type)
             {
                 case RecurrenceTypesEnum.Once:
+                    InputValidationsGeneral();
                     salida.OcurrenceDate = OneOcurrence();
                     break;
                 case RecurrenceTypesEnum.Daily:
+                    InputValidationsDaily();
                     salida.OcurrenceDate = DailyRecurrence(conf.CurrentDate, conf.Periodicity);
                     break;
                 case RecurrenceTypesEnum.Weekly:
+                    InputValidationsWeekly();
                     salida.OcurrenceDate = WeeklyRecurrence();
                     break;
                 case RecurrenceTypesEnum.Monthly:
+                    InputValidationsMonthly();
                     salida.OcurrenceDate = MonthlyRecurrence();
                     break;
-
             }
 
-
-      //      if (conf.EndDate != DateTime.MinValue && salida.OcurrenceDate > conf.EndDate)
-      //          throw new SchedulerException("La ocurrencia calculada supera la fecha limite establecida.");
-
             salida.NextExecutionTime = conf.LanguageManager.GetLanguageDateTimeFormatted(salida.OcurrenceDate);
-//            salida.NextExecutionTime = salida.OcurrenceDate.ToString("dd/MM/yyyy HH:mm");
             salida.Description = DescriptionMount(salida);
 
             return salida;
         }
-        private DateTime OneOcurrence()
+        private static DateTime OneOcurrence()
         {
             DateTime salida;
 
@@ -55,7 +76,7 @@ namespace Scheduler
 
             return salida;
         }
-        private DateTime HourlyRecurrence(DateTime CurrentDate, bool First)
+        private static DateTime HourlyRecurrence(DateTime CurrentDate, bool First)
         {
             DateTime WorkDateTime;
 
@@ -84,7 +105,7 @@ namespace Scheduler
             return WorkDateTime;
         }
 
-        private DateTime DailyRecurrence(DateTime CurrentDate, int DailyPeriodicity)
+        private static DateTime DailyRecurrence(DateTime CurrentDate, int DailyPeriodicity)
         {
             DateTime Salida;
             DateTime WorkDateTime;
@@ -118,7 +139,7 @@ namespace Scheduler
             }
             return WorkDateTime;
         }
-        private DateTime WeeklyRecurrence()
+        private static DateTime WeeklyRecurrence()
         {
             DateTime WorkDateTime;
             bool Processed = false;
@@ -162,7 +183,7 @@ namespace Scheduler
 
             return WorkDateTime;
         }
-        private DateTime MonthlyRecurrence()
+        private static DateTime MonthlyRecurrence()
         {
             DateTime WorkDateTime;
             DateTime datetime_tmp;
@@ -202,7 +223,7 @@ namespace Scheduler
 
             return WorkDateTime;
         }
-        private DateTime GetDateByDayFixed(int FixedDay, DateTime BeginDate)
+        private static DateTime GetDateByDayFixed(int FixedDay, DateTime BeginDate)
         {
             DateTime WorkDateTime;
             int day_tmp;
@@ -220,7 +241,7 @@ namespace Scheduler
 
             return WorkDateTime;
         }
-        private DateTime GetDateByDayPosition(DayPositionEnum search_position, int weekDays, DateTime WorkDateTime)
+        private static DateTime GetDateByDayPosition(DayPositionEnum search_position, int weekDays, DateTime WorkDateTime)
         {
             int Position = 99;
             DateTime LastDayFound = DateTime.MinValue;
@@ -258,7 +279,7 @@ namespace Scheduler
 
             return WorkDateTime;
         }
-        private bool DayOfWeekIncluded(DateTime WorkDateTime)
+        private static bool DayOfWeekIncluded(DateTime WorkDateTime)
         {
             bool Result = false;
 
@@ -275,105 +296,113 @@ namespace Scheduler
 
             return Result;
         }
-        private int GetWeekNumber(DateTime ActualDate)
+        private static int GetWeekNumber(DateTime ActualDate)
         {
             int weekNum = conf.LanguageManager.GetWeekOfYear(ActualDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
             return weekNum;
         }
-        private string DescriptionMount(OutData salida)
+        private static string DescriptionMount(OutData salida)
         {
             string Description = "";
 
             switch (conf.Type)
             {
                 case RecurrenceTypesEnum.Once:
-                    Description = "Occurs One";
+                    Description = conf.LanguageManager.TraslateTag("occursone");
                     break;
                 case RecurrenceTypesEnum.Daily:
-                    Description = "Occurs every " + conf.Periodicity + " day(s)";
+                    Description = conf.LanguageManager.TraslateTag("occursevery") + " " + conf.Periodicity + " " + conf.LanguageManager.TraslateTag("days");
                     break;
                 case RecurrenceTypesEnum.Weekly:
-                    Description = "Occurs every " + conf.Periodicity + " week(s) on " + StringDays();
+                    Description = conf.LanguageManager.TraslateTag("occursevery") + " " + conf.Periodicity + " " + conf.LanguageManager.TraslateTag("weeks") + " " +
+                                  conf.LanguageManager.TraslateTag("on") + " " + StringDays();
                     break;
                 case RecurrenceTypesEnum.Monthly:
                     if (conf.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay)
                     {
-                        Description = "Occurs on day " + conf.MonthlyFixedDay;
+                        Description = conf.LanguageManager.TraslateTag("occursonday") + " " + conf.MonthlyFixedDay;
                     }
                     else
                     {
-                        Description = "Occurs the " + Enum.GetName(typeof(DayPositionEnum), conf.MonthlyDayPosition).ToLower() + " " + Enum.GetName(typeof(WeekDaysEnum), (WeekDaysEnum)conf.WeekDays).ToLower();
+                        Description = conf.LanguageManager.TraslateTag("occursthe") + " " +
+                                      conf.LanguageManager.TraslateTag(Enum.GetName(typeof(DayPositionEnum), conf.MonthlyDayPosition).ToLower()) + " " +
+                                      conf.LanguageManager.TraslateTag(Enum.GetName(typeof(WeekDaysEnum), (WeekDaysEnum)conf.WeekDays).ToLower());
                     }
-                    Description += " of every " + conf.Periodicity + " month(s)";
+                    Description += " "+conf.LanguageManager.TraslateTag("ofevery")+" "+ conf.Periodicity + " "+ conf.LanguageManager.TraslateTag("months");
                     break;
 
             }
             switch (conf.HourlyFrecuency)
             {
                 case HourlyFrecuencysEnum.OccursOne:
-                    Description += " at " + conf.HourlyOccursAt.ToString("HH:mm");
+                    Description += " "+conf.LanguageManager.TraslateTag("at")+" " + conf.LanguageManager .GetLanguageTimeFormatted (conf.HourlyOccursAt);
                     break;
                 case HourlyFrecuencysEnum.OccursEvery:
-                    Description += ". Every " + conf.HourlyOccursEvery + " hour(s) between " + conf.HourlyStartAt.ToString("HH:mm") + " and " + conf.HourlyEndAt.ToString("HH:mm");
+                    Description += ". "+ conf.LanguageManager.TraslateTag("every")+" " + conf.HourlyOccursEvery + " "+
+                                         conf.LanguageManager.TraslateTag("hours")+" " + conf.LanguageManager.TraslateTag("between")+" " +
+                                         conf.LanguageManager.GetLanguageTimeFormatted(conf.HourlyStartAt) + " "+ conf.LanguageManager.TraslateTag("and")+" " + conf.LanguageManager.GetLanguageTimeFormatted(conf.HourlyEndAt);
                     break;
                 default:
                     break;
             }
-            Description += ". Schedule will be used on " + conf.LanguageManager.GetLanguageDateFormatted  (salida.OcurrenceDate) +
-                            " at " + conf.LanguageManager.GetLanguageTimeFormatted(salida.OcurrenceDate) + " starting on " + conf.LanguageManager.GetLanguageDateFormatted (conf.StartDate);
+            Description += ". "+ conf.LanguageManager.TraslateTag("schedulewillbeusedon")+" " + 
+                                 conf.LanguageManager.GetLanguageDateFormatted(salida.OcurrenceDate) + " "+
+                                 conf.LanguageManager.TraslateTag("at")+" " + 
+                                 conf.LanguageManager.GetLanguageTimeFormatted(salida.OcurrenceDate) + " "+
+                                 conf.LanguageManager.TraslateTag("startingon")+" " + conf.LanguageManager.GetLanguageDateFormatted(conf.StartDate);
 
-            return conf.LanguageManager.Traslate(Description);
+            return Description;
         }
-        private string StringDays()
+        private static string StringDays()
         {
             string daystext = "";
 
             if ((conf.WeekDays & (int)WeekDaysEnum.Monday) != 0)
             {
-                daystext = "monday";
+                daystext = conf.LanguageManager .TraslateTag ("monday");
             }
             if ((conf.WeekDays & (int)WeekDaysEnum.Tuesday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "tuesday";
+                daystext += conf.LanguageManager.TraslateTag("tuesday");
             }
             if ((conf.WeekDays & (int)WeekDaysEnum.Wednesday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "wednesday";
+                daystext += conf.LanguageManager.TraslateTag("wednesday");
             }
             if ((conf.WeekDays & (int)WeekDaysEnum.Thursday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "thursday";
+                daystext += conf.LanguageManager.TraslateTag("thursday");
             }
             if ((conf.WeekDays & (int)WeekDaysEnum.Friday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "friday";
+                daystext += conf.LanguageManager.TraslateTag("friday");
             }
             if ((conf.WeekDays & (int)WeekDaysEnum.Saturday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "saturday";
+                daystext += conf.LanguageManager.TraslateTag("saturday");
             }
             if ((conf.WeekDays & (int)WeekDaysEnum.Sunday) != 0)
             {
                 if (daystext != "")
                     daystext += ", ";
-                daystext += "sunday";
+                daystext += conf.LanguageManager.TraslateTag("sunday");
             }
 
 
             return daystext;
         }
 
-        public int NextHourInterval(int Hour)
+        public static int NextHourInterval(int Hour)
         {
             int x;
             int NextHour = -1;
@@ -390,6 +419,77 @@ namespace Scheduler
 
             }
             return NextHour;
+        }
+        private static void InputValidationsGeneral()
+        {
+            // si El rango es por ocurrencecount y se envia a 0 se establece 1 ejecución por defecto
+            if (conf.Range == RangeEnum.OcurrenceCount && conf.OcurrenceCount == 0)
+                throw new SchedulerException("Debe indicarse el número de ocurrencias a obtener.");
+
+            // Si se indica rango por fecha de fin y no se indica la fecha de fin
+            if (conf.Range == RangeEnum.EndByDate && conf.EndDate == DateTime.MinValue)
+                throw new SchedulerException("Debe indicarse la fecha de finalización cuando el rango de ejecución está delimitado por la fecha hasta.");
+
+            // Comprueba que se pase la fecha actual para el calculo de la siguiente ocurrencia
+            if (conf.CurrentDate == DateTime.MinValue)
+                throw new SchedulerException("Debe indicar una fecha actual para el calculo de la siguiente ocurrencia");
+
+            if (conf.StartDate == DateTime.MinValue)
+                throw new SchedulerException("Debe indicar la fecha limite de inicio.");
+
+            // Se comprueba el currentdate no sea inferior a la fecha de inicio
+            if (conf.StartDate != DateTime.MinValue && conf.CurrentDate < conf.StartDate)
+                throw new SchedulerException("La fecha de calculo es inferior a la fecha de inicio establecida");
+        }
+        private static void InputValidationsHourly()
+        {
+            if (conf.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery)
+            {
+                // Si se indica periodicidad horaria se comprueba que se han indicado la hora de limite desde-hasta
+                if (conf.HourlyStartAt == DateTime.MinValue && conf.HourlyEndAt == DateTime.MinValue)
+                    throw new SchedulerException("Debe indicarse las horas limite cuando el modo horario es periodico.");
+                // Se comprueba que la hora desde no es superior a la hora hasta en modo hourly
+                if (conf.HourlyStartAt >= conf.HourlyEndAt)
+                    throw new SchedulerException("La hora 'desde' debe ser inferior a la hora 'hasta'.");
+            }
+
+            // Si estamos en modo hourly periodico se comprueba que se envia la periodicidad de horas
+            if (conf.HourlyFrecuency == HourlyFrecuencysEnum.OccursEvery && conf.HourlyOccursEvery <= 0)
+                throw new SchedulerException("Debe indicarse un valor para la periodicidad horaria.");
+        }
+        private static void InputValidationsDaily()
+        {
+            InputValidationsGeneral();
+            InputValidationsHourly();
+            // Se comprueba que la periodicidad no es igual o inferior a 0 cuando es de tipo diario o semanal
+            if (conf.Periodicity <= 0)
+                throw new SchedulerException("La Periodicidad debe ser superior a 0.");
+        }
+        private static void InputValidationsWeekly()
+        {
+            InputValidationsGeneral();
+            InputValidationsHourly();
+            // Se comprueba que la periodicidad no es igual o inferior a 0 cuando es de tipo diario o semanal
+            if (conf.Periodicity <= 0)
+                throw new SchedulerException("La Periodicidad debe ser superior a 0.");
+
+            // Comprueba que se han indicado algun dia de la semana en la recurrencia semanal
+            if (conf.WeekDays == 0)
+                throw new SchedulerException("Debe indicarse algún día de la semana para la aplicación de la recurrencia semanal.");
+
+        }
+        private static void InputValidationsMonthly()
+        {
+            InputValidationsGeneral();
+            InputValidationsHourly();
+            // Se comprueba que la periodicidad no es igual o inferior a 0 cuando es de tipo diario o semanal
+            if (conf.Periodicity <= 0)
+                throw new SchedulerException("La Periodicidad debe ser superior a 0.");
+
+            // Comprobaciones recurrencia Mensual
+            if (conf.MonthlyFrecuency == MonthlyFrecuencyEnum.FixedDay && (conf.MonthlyFixedDay <= 0 || conf.MonthlyFixedDay > 31))
+                throw new SchedulerException("El día debe del mes estar comprendido entre 1 y 31.");
+
         }
     }
 }
